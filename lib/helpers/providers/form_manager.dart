@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class FormManager with ChangeNotifier {
   final _fieldStates = <String, FormFieldState>{};
 
-  void setValueForField(String key, String? newValue) {
+  void setValue(String key, String? newValue) {
     _ensureExists(key);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_fieldStates[key]?.value != newValue) {
@@ -13,30 +13,20 @@ class FormManager with ChangeNotifier {
     });
   }
 
-  String? getErrorMessageForField(String key) {
+  String? getErrorMessage(String key) {
     _ensureExists(key);
     return _fieldStates[key]?.errorMessage;
   }
 
-  String? getValueForField(String key) {
+  void setErrorMessage(String key, String? value) {
+    _ensureExists(key);
+    _fieldStates[key]?.errorMessage = value;
+  }
+
+  String? getValue(String key) {
     _ensureExists(key);
     return _fieldStates[key]?.value;
   }
-
-  FormFieldValidator<T>? wrapValidator<T>(String key, FormFieldValidator<T>? validator) {
-    if (validator == null) return null;
-    _ensureExists(key);
-
-    return (input) {
-      final result = validator(input);
-      _fieldStates[key]?.errorMessage = result;
-
-      return result;
-    };
-  }
-
-  List<FormFieldState> get erroredFields =>
-      _fieldStates.entries.where((s) => s.value.errorMessage != null).map((s) => s.value).toList();
 
   void _ensureExists(String key) {
     _fieldStates[key] ??= FormFieldState(key: key);
