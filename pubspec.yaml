@@ -33,7 +33,6 @@ dependencies:
   dio: ^4.0.6
   provider: ^6.0.3
   flutter_svg: ^1.1.0
-  animated_bottom_navigation_bar: ^0.3.3
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
