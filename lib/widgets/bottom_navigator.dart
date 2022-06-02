@@ -61,11 +61,12 @@ class _BottomNavigatorState extends State<BottomNavigator> {
     for (var e in pagesTemp) {
       e.scale = 1;
     }
+    pagesTemp[currentIndex].selectedScale = 0;
+    pagesTemp[currentIndex].scale = 1;
+
     pagesTemp[targetIndex].scale = 0;
     pagesTemp[targetIndex].selectedScale = 1;
 
-    pagesTemp[currentIndex].selectedScale = 0;
-    pagesTemp[currentIndex].scale = 1;
     setState(() {
       pages = pagesTemp;
     });
