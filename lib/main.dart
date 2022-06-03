@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_capstone_project/helpers/form_helper.dart';
 import 'package:flutter_capstone_project/helpers/providers/form_manager.dart';
 import 'package:flutter_capstone_project/helpers/validators.dart';
+import 'package:flutter_capstone_project/screens/main_screen.dart';
 import 'package:flutter_capstone_project/view_models/token_view_model.dart';
 import 'package:flutter_capstone_project/widgets/bottom_navigator.dart';
 import 'package:flutter_capstone_project/widgets/inputs/text_input.dart';
@@ -73,18 +74,9 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: "Poppins"),
-      home: Scaffold(
-        extendBody: true,
-        appBar: AppBar(),
-        body: FormHelper(
-          formManager: _formManager,
-          builder: (_) => Column(
-            children: [TextInput(label: 'Emasil', name: 'email', onValidate: onValidateEmail)],
-          ),
-        ),
-        bottomNavigationBar: const BottomNavigator(),
-      ),
+      home: MainScreen(),
     );
 
     // return Consumer<TokenViewModel>(

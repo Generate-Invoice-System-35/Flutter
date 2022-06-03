@@ -29,7 +29,7 @@ class BottomNavigator extends StatefulWidget {
 }
 
 class _BottomNavigatorState extends State<BottomNavigator> {
-  final animationDuration = 100;
+  final animationDuration = 150;
   int _curPageIdx = 0;
 
   List<BottomBar> pages = [
