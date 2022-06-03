@@ -33,4 +33,6 @@ class ColorConstant {
   static Color greenLime = HexColor("#E3FFB5");
   static Color lightGray = HexColor("#9C9C9C");
   static Color white = HexColor("#FFFFFF");
+
+  static Color homeHeaderBg = HexColor('#F2F1F1');
 }
