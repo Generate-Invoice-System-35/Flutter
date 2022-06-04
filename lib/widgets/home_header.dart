@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_capstone_project/utils/color.constant.dart';
-import 'package:flutter_svg/svg.dart';
 
 class HomeHeader extends StatelessWidget {
   const HomeHeader({Key? key}) : super(key: key);
@@ -10,6 +7,7 @@ class HomeHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: const EdgeInsets.only(bottom: 52),
       decoration: BoxDecoration(
         color: ColorConstant.homeHeaderBg,
         image: const DecorationImage(
@@ -27,8 +25,9 @@ class HomeHeader extends StatelessWidget {
       width: double.infinity,
       child: SafeArea(
         child: Stack(
-          children: const [
-            Align(
+          clipBehavior: Clip.none,
+          children: [
+            const Align(
               alignment: Alignment.topCenter,
               child: Image(
                 image: AssetImage(
@@ -38,7 +37,7 @@ class HomeHeader extends StatelessWidget {
                 width: 86,
               ),
             ),
-            Positioned(
+            const Positioned(
               child: Image(
                 image: AssetImage(
                   "assets/images/business-person.png",
@@ -47,7 +46,7 @@ class HomeHeader extends StatelessWidget {
                 width: 330,
               ),
             ),
-            Positioned(
+            const Positioned(
               top: 100,
               right: 0,
               child: Padding(
@@ -58,6 +57,24 @@ class HomeHeader extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: -24,
+              left: MediaQuery.of(context).size.width / 3,
+              child: GestureDetector(
+                onTap: () {},
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  decoration: BoxDecoration(
+                      gradient: ColorConstant.orangeGradient,
+                      borderRadius: const BorderRadius.all(Radius.circular(16))),
+                  child: const Text(
+                    "Start Now. It’s Free!",
+                    style:
+                        TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w400),
                   ),
                 ),
               ),

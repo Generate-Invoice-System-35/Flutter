@@ -24,13 +24,8 @@ class _MainScreenState extends State<MainScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            HomeHeader(),
-            Container(
-              width: double.infinity,
-              height: 20,
-              color: Colors.red,
-            ),
-            HomeCarousel(),
+            const HomeHeader(),
+            const HomeCarousel(),
             SizedBox(
               height: 200,
             ),
