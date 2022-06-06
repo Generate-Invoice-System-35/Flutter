@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_capstone_project/utils/color.constant.dart';
+import 'package:flutter_capstone_project/utils/typography.constant.dart';
 
 class HomeHeader extends StatelessWidget {
   const HomeHeader({Key? key}) : super(key: key);
@@ -51,14 +52,8 @@ class HomeHeader extends StatelessWidget {
               right: 0,
               child: Padding(
                 padding: EdgeInsets.only(right: 20),
-                child: Text(
-                  "Find the convenience of\n online invoicing here.",
-                  textAlign: TextAlign.end,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
+                child: Text("Find the convenience of\n online invoicing here.",
+                    textAlign: TextAlign.end, style: TypographyConstant.h1),
               ),
             ),
             Positioned(
@@ -71,10 +66,9 @@ class HomeHeader extends StatelessWidget {
                   decoration: BoxDecoration(
                       gradient: ColorConstant.orangeGradient,
                       borderRadius: const BorderRadius.all(Radius.circular(16))),
-                  child: const Text(
+                  child: Text(
                     "Start Now. It’s Free!",
-                    style:
-                        TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w400),
+                    style: TypographyConstant.button1.merge(const TextStyle(color: Colors.white)),
                   ),
                 ),
               ),

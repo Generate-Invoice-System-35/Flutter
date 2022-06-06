@@ -1,4 +1,3 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -26,7 +25,7 @@ class _MainScreenState extends State<MainScreen> {
           children: [
             const HomeHeader(),
             const HomeCarousel(),
-            SizedBox(
+            const SizedBox(
               height: 200,
             ),
             Container(

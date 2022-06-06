@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_capstone_project/utils/color.constant.dart';
+import 'package:flutter_capstone_project/utils/shadow.constant.dart';
 import 'package:flutter_capstone_project/widgets/common/gradient_text.dart';
 
 class CarouselItemData {
@@ -45,15 +46,7 @@ class _HomeCarouselState extends State<HomeCarousel> {
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(24),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      spreadRadius: 0,
-                      blurRadius: 30,
-                      offset: const Offset(0, 3),
-                      blurStyle: BlurStyle.outer, // changes position of shadow
-                    ),
-                  ],
+                  boxShadow: [ShadowConstant.boxShadow1],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

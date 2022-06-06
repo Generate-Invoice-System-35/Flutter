@@ -5,6 +5,7 @@ import 'package:flutter_capstone_project/helpers/validators.dart';
 import 'package:flutter_capstone_project/screens/main_screen.dart';
 import 'package:flutter_capstone_project/view_models/token_view_model.dart';
 import 'package:flutter_capstone_project/widgets/bottom_navigator.dart';
+import 'package:flutter_capstone_project/widgets/fragments/login_fragment.dart';
 import 'package:flutter_capstone_project/widgets/inputs/text_input.dart';
 import 'package:provider/provider.dart';
 
@@ -76,7 +77,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: "Poppins"),
-      home: MainScreen(),
+      home: LoginFragment(),
     );
 
     // return Consumer<TokenViewModel>(

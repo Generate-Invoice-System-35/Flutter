@@ -35,4 +35,7 @@ class ColorConstant {
   static Color white = HexColor("#FFFFFF");
 
   static Color homeHeaderBg = HexColor('#F2F1F1');
+  static Color redLight = HexColor("#FFEDE5");
+  static Color divider1 = HexColor("#E9E9E9");
+  static Color inputBorder = HexColor("#E1E1E1");
 }

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_capstone_project/utils/color.constant.dart';
+import 'package:flutter_capstone_project/utils/shadow.constant.dart';
+import 'package:flutter_capstone_project/utils/typography.constant.dart';
 import 'package:flutter_svg/svg.dart';
 
 class BottomBar {
@@ -83,15 +85,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
       data: const NavigationBarThemeData(),
       child: Container(
         decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              spreadRadius: 0,
-              blurRadius: 30,
-              offset: const Offset(0, 3),
-              blurStyle: BlurStyle.outer, // changes position of shadow
-            ),
-          ],
+          boxShadow: [ShadowConstant.boxShadow1],
           borderRadius:
               const BorderRadius.only(topLeft: Radius.circular(36), topRight: Radius.circular(36)),
           border: const Border(
@@ -127,11 +121,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
                           gradient: ColorConstant.orangeGradient,
                           borderRadius: const BorderRadius.all(Radius.circular(16))),
                       padding: const EdgeInsets.only(top: 9, right: 22, left: 22, bottom: 10),
-                      child: Text(e.value.text,
-                          style: TextStyle(
-                            color: ColorConstant.white,
-                            fontSize: 14,
-                          )),
+                      child: Text(e.value.text, style: TypographyConstant.button1),
                     ),
                   ),
                 ),
