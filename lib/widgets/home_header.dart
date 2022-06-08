@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_capstone_project/utils/color.constant.dart';
+import 'package:flutter_capstone_project/utils/shadow.constant.dart';
 import 'package:flutter_capstone_project/utils/typography.constant.dart';
+import 'package:flutter_capstone_project/widgets/common/gradient_button.dart';
 
 class HomeHeader extends StatelessWidget {
   const HomeHeader({Key? key}) : super(key: key);
@@ -8,26 +10,31 @@ class HomeHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 52),
-      decoration: BoxDecoration(
-        color: ColorConstant.homeHeaderBg,
-        image: const DecorationImage(
-          image: AssetImage("assets/images/gradient-bg.png"),
-          fit: BoxFit.cover,
-          alignment: Alignment.topCenter,
-        ),
-        borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(36), bottomRight: Radius.circular(36)),
-      ),
-      // decoration: BoxDecoration(
-      //   color: Colors.blue[900],
-      // ),
-      height: 341,
+      margin: const EdgeInsets.only(bottom: 28),
+      height: 365,
       width: double.infinity,
       child: SafeArea(
         child: Stack(
-          clipBehavior: Clip.none,
           children: [
+            Positioned(
+              top: 0,
+              bottom: 24,
+              left: 0,
+              right: 0,
+              child: Container(
+                height: 365,
+                decoration: BoxDecoration(
+                  color: ColorConstant.homeHeaderBg,
+                  image: const DecorationImage(
+                    image: AssetImage("assets/images/gradient-bg.png"),
+                    fit: BoxFit.cover,
+                    alignment: Alignment.topCenter,
+                  ),
+                  borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(36), bottomRight: Radius.circular(36)),
+                ),
+              ),
+            ),
             const Align(
               alignment: Alignment.topCenter,
               child: Image(
@@ -39,12 +46,15 @@ class HomeHeader extends StatelessWidget {
               ),
             ),
             const Positioned(
+              bottom: 24,
+              left: 20,
               child: Image(
                 image: AssetImage(
                   "assets/images/business-person.png",
                 ),
-                height: 532,
-                width: 330,
+                height: 536 / 2,
+                width: 532 / 2,
+                fit: BoxFit.cover,
               ),
             ),
             const Positioned(
@@ -57,20 +67,34 @@ class HomeHeader extends StatelessWidget {
               ),
             ),
             Positioned(
-              bottom: -24,
-              left: MediaQuery.of(context).size.width / 3,
-              child: GestureDetector(
-                onTap: () {},
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                  decoration: BoxDecoration(
-                      gradient: ColorConstant.orangeGradient,
-                      borderRadius: const BorderRadius.all(Radius.circular(16))),
-                  child: Text(
-                    "Start Now. It’s Free!",
-                    style: TypographyConstant.button1.merge(const TextStyle(color: Colors.white)),
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GradientButton(
+                    "Sign Up",
+                    gradient: ColorConstant.greyGradient,
+                    onTap: () {},
+                    borderRadius: const BorderRadius.all(Radius.circular(16)),
+                    boxShadow: [ShadowConstant.boxShadow1],
+                    padding: const EdgeInsets.symmetric(horizontal: 27, vertical: 14),
+                    textStyle:
+                        TypographyConstant.button1.merge(TextStyle(color: ColorConstant.darkBlue)),
                   ),
-                ),
+                  const SizedBox(width: 46),
+                  GradientButton(
+                    "Sign In",
+                    gradient: ColorConstant.orangeGradient,
+                    onTap: () {},
+                    borderRadius: const BorderRadius.all(Radius.circular(16)),
+                    boxShadow: [ShadowConstant.boxShadow1],
+                    padding: const EdgeInsets.symmetric(horizontal: 27, vertical: 14),
+                    textStyle:
+                        TypographyConstant.button1.merge(TextStyle(color: ColorConstant.white)),
+                  ),
+                ],
               ),
             ),
           ],

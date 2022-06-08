@@ -23,6 +23,14 @@ class ColorConstant {
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
   );
+  static LinearGradient greyGradient = LinearGradient(
+    colors: [
+      HexColor("#FFFFFF"),
+      HexColor("#EDEAEA"),
+    ],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+  );
 
   static Color darkBlue = HexColor("#09273E");
   static Color orangeSolid = HexColor("#F75000");

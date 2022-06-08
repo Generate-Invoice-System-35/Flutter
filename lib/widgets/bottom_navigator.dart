@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_capstone_project/utils/color.constant.dart';
 import 'package:flutter_capstone_project/utils/shadow.constant.dart';
 import 'package:flutter_capstone_project/utils/typography.constant.dart';
@@ -12,19 +10,32 @@ class BottomBar {
   SvgPicture icon;
   String text;
   Widget child;
-  double scale;
-  double selectedScale;
   BottomBar({
     required this.icon,
     required this.text,
     required this.child,
-    required this.scale,
-    required this.selectedScale,
   });
 }
 
+class AnimatedBottomBar extends BottomBar {
+  double scale;
+  double selectedScale;
+  AnimatedBottomBar({
+    required icon,
+    required text,
+    required child,
+    required this.scale,
+    required this.selectedScale,
+  }) : super(child: child, icon: icon, text: text);
+}
+
 class BottomNavigator extends StatefulWidget {
-  const BottomNavigator({Key? key}) : super(key: key);
+  final List<BottomBar> pages;
+  int curPage;
+  void Function(int) onChangePage;
+  BottomNavigator(
+      {Key? key, required this.pages, required this.curPage, required this.onChangePage})
+      : super(key: key);
 
   @override
   State<BottomNavigator> createState() => _BottomNavigatorState();
@@ -32,34 +43,18 @@ class BottomNavigator extends StatefulWidget {
 
 class _BottomNavigatorState extends State<BottomNavigator> {
   final animationDuration = 150;
-  int _curPageIdx = 0;
 
-  List<BottomBar> pages = [
-    BottomBar(
-      icon: SvgPicture.asset('assets/icons/home.svg'),
-      text: "Home",
-      child: Container(),
-      scale: 1,
-      selectedScale: 1,
-    ),
-    BottomBar(
-      icon: SvgPicture.asset('assets/icons/dashboard.svg'),
-      text: "Dashboard",
-      child: Container(),
-      scale: 1,
-      selectedScale: 1,
-    ),
-    BottomBar(
-      icon: SvgPicture.asset('assets/icons/profile.svg'),
-      text: "Profile",
-      child: Container(),
-      scale: 1,
-      selectedScale: 1,
-    ),
+  late List<AnimatedBottomBar> animatedPages = [
+    ...widget.pages
+        .map(
+          (e) => AnimatedBottomBar(
+              icon: e.icon, text: e.text, child: e.child, scale: 1, selectedScale: 1),
+        )
+        .toList()
   ];
 
   void handleChangeBar({required int targetIndex, required int currentIndex}) {
-    List<BottomBar> pagesTemp = pages;
+    List<AnimatedBottomBar> pagesTemp = animatedPages;
     for (var e in pagesTemp) {
       e.scale = 1;
     }
@@ -70,12 +65,10 @@ class _BottomNavigatorState extends State<BottomNavigator> {
     pagesTemp[targetIndex].selectedScale = 1;
 
     setState(() {
-      pages = pagesTemp;
+      animatedPages = pagesTemp;
     });
     Future.delayed(Duration(milliseconds: animationDuration), () {
-      setState(() {
-        _curPageIdx = targetIndex;
-      });
+      widget.onChangePage(targetIndex);
     });
   }
 
@@ -97,11 +90,11 @@ class _BottomNavigatorState extends State<BottomNavigator> {
         child: NavigationBar(
           backgroundColor: Colors.transparent,
           labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
-          selectedIndex: _curPageIdx,
+          selectedIndex: widget.curPage,
           height: 70,
           onDestinationSelected: (targetIndex) =>
-              handleChangeBar(targetIndex: targetIndex, currentIndex: _curPageIdx),
-          destinations: pages
+              handleChangeBar(targetIndex: targetIndex, currentIndex: widget.curPage),
+          destinations: animatedPages
               .asMap()
               .entries
               .map(
@@ -121,7 +114,9 @@ class _BottomNavigatorState extends State<BottomNavigator> {
                           gradient: ColorConstant.orangeGradient,
                           borderRadius: const BorderRadius.all(Radius.circular(16))),
                       padding: const EdgeInsets.only(top: 9, right: 22, left: 22, bottom: 10),
-                      child: Text(e.value.text, style: TypographyConstant.button1),
+                      child: Text(e.value.text,
+                          style: TypographyConstant.button1
+                              .merge(TextStyle(color: ColorConstant.white))),
                     ),
                   ),
                 ),

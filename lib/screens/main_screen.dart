@@ -4,8 +4,12 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_capstone_project/utils/color.constant.dart';
 import 'package:flutter_capstone_project/widgets/bottom_navigator.dart';
+import 'package:flutter_capstone_project/widgets/fragments/dashboard_fragment/index.dart';
+import 'package:flutter_capstone_project/widgets/fragments/home_fragment/index.dart';
+import 'package:flutter_capstone_project/widgets/fragments/profile_fragment/index.dart';
 import 'package:flutter_capstone_project/widgets/home_carousel.dart';
 import 'package:flutter_capstone_project/widgets/home_header.dart';
+import 'package:flutter_svg/svg.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -15,28 +19,53 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  int curPage = 0;
+  List<BottomBar> pages = [
+    BottomBar(
+      icon: SvgPicture.asset('assets/icons/home.svg'),
+      text: "Home",
+      child: const HomeFragment(),
+    ),
+    BottomBar(
+      icon: SvgPicture.asset('assets/icons/dashboard.svg'),
+      text: "Dashboard",
+      child: const DashboardFragment(),
+    ),
+    BottomBar(
+      icon: SvgPicture.asset('assets/icons/profile.svg'),
+      text: "Profile",
+      child: const ProfileFragment(),
+    ),
+  ];
+  void handleChangePage(int page) {
+    setState(() => curPage = page);
+  }
+
   @override
   Widget build(BuildContext context) {
     // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent));
     return Scaffold(
       // extendBodyBehindAppBar: true,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const HomeHeader(),
-            const HomeCarousel(),
-            const SizedBox(
-              height: 200,
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/gradient-bg.png"),
+                fit: BoxFit.cover,
+                alignment: Alignment.topCenter,
+              ),
             ),
-            Container(
-              height: 200,
-              width: 20,
-              color: Colors.red,
-            )
-          ],
-        ),
+          ),
+          pages[curPage].child,
+        ],
       ),
-      bottomNavigationBar: const BottomNavigator(),
+      bottomNavigationBar: BottomNavigator(
+        pages: pages,
+        curPage: curPage,
+        onChangePage: handleChangePage,
+      ),
     );
   }
 }
