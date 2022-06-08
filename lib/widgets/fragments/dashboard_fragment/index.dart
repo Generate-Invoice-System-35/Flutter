@@ -3,7 +3,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_capstone_project/widgets/fragments/dashboard_fragment/components/invoices_fragment.dart';
 
 class DashboardFragment extends StatefulWidget {
-  const DashboardFragment({Key? key}) : super(key: key);
+  final int idx;
+  const DashboardFragment(this.idx, {Key? key}) : super(key: key);
 
   @override
   State<DashboardFragment> createState() => _DashboardFragmentState();

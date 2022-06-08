@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_capstone_project/helpers/providers/form_manager.dart';
+import 'package:flutter_capstone_project/helpers/providers/fragment_manager.dart';
 import 'package:flutter_capstone_project/helpers/validators.dart';
 import 'package:flutter_capstone_project/screens/main_screen.dart';
 import 'package:flutter_capstone_project/view_models/token_view_model.dart';
@@ -17,6 +18,7 @@ class MyProvider extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => TokenViewModel()),
+        ChangeNotifierProvider(create: (_) => FragmentManager()),
       ],
       child: const MyApp(),
     );

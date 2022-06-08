@@ -3,7 +3,8 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 class ProfileFragment extends StatefulWidget {
-  const ProfileFragment({Key? key}) : super(key: key);
+  final int idx;
+  const ProfileFragment(this.idx, {Key? key}) : super(key: key);
 
   @override
   State<ProfileFragment> createState() => _ProfileFragmentState();

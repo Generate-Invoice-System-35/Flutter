@@ -1,11 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_capstone_project/helpers/providers/fragment_manager.dart';
 import 'package:flutter_capstone_project/utils/color.constant.dart';
 import 'package:flutter_capstone_project/utils/shadow.constant.dart';
 import 'package:flutter_capstone_project/utils/typography.constant.dart';
 import 'package:flutter_capstone_project/widgets/common/gradient_button.dart';
+import 'package:provider/provider.dart';
 
 class HomeHeader extends StatelessWidget {
   const HomeHeader({Key? key}) : super(key: key);
+
+  void onNavigateLogin(BuildContext context) {
+    context.read<FragmentManager>().updateFragmentByIndex(
+        idx: context.read<FragmentManager>().untrackedCurrentIdx,
+        fragmentEnum: FragmentEnum.loginFragment);
+  }
+
+  void onNavigateRegister(BuildContext context) {
+    context.read<FragmentManager>().updateFragmentByIndex(
+        idx: context.read<FragmentManager>().untrackedCurrentIdx,
+        fragmentEnum: FragmentEnum.registerFragment);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +90,7 @@ class HomeHeader extends StatelessWidget {
                   GradientButton(
                     "Sign Up",
                     gradient: ColorConstant.greyGradient,
-                    onTap: () {},
+                    onTap: () => onNavigateRegister(context),
                     borderRadius: const BorderRadius.all(Radius.circular(16)),
                     boxShadow: [ShadowConstant.boxShadow1],
                     padding: const EdgeInsets.symmetric(horizontal: 27, vertical: 14),
@@ -87,7 +101,7 @@ class HomeHeader extends StatelessWidget {
                   GradientButton(
                     "Sign In",
                     gradient: ColorConstant.orangeGradient,
-                    onTap: () {},
+                    onTap: () => onNavigateLogin(context),
                     borderRadius: const BorderRadius.all(Radius.circular(16)),
                     boxShadow: [ShadowConstant.boxShadow1],
                     padding: const EdgeInsets.symmetric(horizontal: 27, vertical: 14),
