@@ -27,27 +27,38 @@ class _MainScreenState extends State<MainScreen> {
     context.read<FragmentManager>().untrackedCurrentIdx = page;
   }
 
+  Future<bool> handleBackPressed(BuildContext context) {
+    final bool isEmpty = context.read<FragmentManager>().isEmpty();
+    if (isEmpty) {
+      Navigator.pop(context);
+    }
+    context.read<FragmentManager>().pop();
+    return Future.value(false);
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<BottomBar> pages = context.read<FragmentManager>().pages;
 
     // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent));
     return Scaffold(
-      // extendBodyBehindAppBar: true,
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/images/gradient-bg.png"),
-                fit: BoxFit.cover,
-                alignment: Alignment.topCenter,
+      body: WillPopScope(
+        onWillPop: () => handleBackPressed(context),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/images/gradient-bg.png"),
+                  fit: BoxFit.cover,
+                  alignment: Alignment.topCenter,
+                ),
               ),
             ),
-          ),
-          pages[curPage].child,
-        ],
+            pages[curPage].child,
+          ],
+        ),
       ),
       bottomNavigationBar: BottomNavigator(
         pages: pages,

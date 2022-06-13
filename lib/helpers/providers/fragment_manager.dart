@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_capstone_project/services/local_storage.dart';
+import 'package:flutter_capstone_project/helpers/stack.dart';
 import 'package:flutter_capstone_project/widgets/bottom_navigator.dart';
 import 'package:flutter_capstone_project/widgets/fragments/dashboard_fragment/index.dart';
 import 'package:flutter_capstone_project/widgets/fragments/home_fragment/index.dart';
@@ -11,6 +11,7 @@ enum FragmentEnum {
   registerFragment,
   onboardingFragment,
   invoiceFragment,
+  uploadFragment,
   none,
 }
 
@@ -35,10 +36,23 @@ class FragmentManager with ChangeNotifier {
   ];
   List<BottomBar> get pages => _pages;
 
-  List<FragmentEnum> activeFragment = List.generate(3, (index) => FragmentEnum.none);
+  List<StackList<FragmentEnum>> activeFragment = List.generate(3, (index) => StackList());
 
-  void updateFragmentByIndex({required int idx, required FragmentEnum fragmentEnum}) {
-    activeFragment[idx] = fragmentEnum;
+  void navigateToFragment({required FragmentEnum fragmentEnum}) {
+    activeFragment[untrackedCurrentIdx].push(fragmentEnum);
     notifyListeners();
+  }
+
+  void pop() {
+    activeFragment[untrackedCurrentIdx].pop();
+    notifyListeners();
+  }
+
+  bool isEmpty() {
+    return activeFragment[untrackedCurrentIdx].isEmpty;
+  }
+
+  FragmentEnum? top() {
+    return isEmpty() ? null : activeFragment[untrackedCurrentIdx].peek;
   }
 }

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_capstone_project/helpers/providers/fragment_manager.dart';
 import 'package:flutter_capstone_project/utils/color.constant.dart';
 import 'package:flutter_capstone_project/utils/typography.constant.dart';
 import 'package:flutter_capstone_project/widgets/common/gradient_button.dart';
 import 'package:flutter_capstone_project/widgets/common/table.dart';
 import 'package:flutter_capstone_project/widgets/inputs/search_input.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 class InvoicesFragment extends StatefulWidget {
   const InvoicesFragment({Key? key}) : super(key: key);
@@ -16,6 +18,10 @@ class InvoicesFragment extends StatefulWidget {
 }
 
 class _InvoicesFragmentState extends State<InvoicesFragment> {
+  void onNavigateUpload(BuildContext context) {
+    context.read<FragmentManager>().navigateToFragment(fragmentEnum: FragmentEnum.uploadFragment);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -34,7 +40,7 @@ class _InvoicesFragmentState extends State<InvoicesFragment> {
               GradientButton(
                 "Upload",
                 gradient: ColorConstant.orangeGradient,
-                onTap: () {},
+                onTap: () => onNavigateUpload(context),
                 padding: const EdgeInsets.fromLTRB(17, 9, 18, 10),
                 borderRadius: const BorderRadius.all(Radius.circular(16)),
                 height: 40,

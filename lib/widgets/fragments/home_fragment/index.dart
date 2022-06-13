@@ -17,9 +17,7 @@ class HomeFragment extends StatefulWidget {
 class _HomeFragmentState extends State<HomeFragment> {
   @override
   Widget build(BuildContext context) {
-    FragmentEnum fragmentEnum = context
-        .watch<FragmentManager>()
-        .activeFragment[context.read<FragmentManager>().untrackedCurrentIdx];
+    FragmentEnum? fragmentEnum = context.watch<FragmentManager>().top();
     switch (fragmentEnum) {
       case FragmentEnum.loginFragment:
         return LoginFragment();

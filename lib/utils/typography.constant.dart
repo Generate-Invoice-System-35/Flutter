@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class TypographyConstant {
+  static const TextStyle bigTitle = TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.w700,
+  );
   static const TextStyle title = TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.w700,
