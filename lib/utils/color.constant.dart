@@ -46,6 +46,7 @@ class ColorConstant {
   static Color redLight = HexColor("#FFEDE5");
   static Color divider1 = HexColor("#E9E9E9");
   static Color inputBorder = HexColor("#E1E1E1");
+  static Color backgroundIndicator = HexColor("#D9D9D9");
 
   static Color uploadContainerBg = HexColor("#FFFAF8");
 }

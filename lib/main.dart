@@ -76,7 +76,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: "Poppins"),
-      home: SplashScreen(),
+      home: MainScreen(),
     );
 
     // return Consumer<TokenViewModel>(
