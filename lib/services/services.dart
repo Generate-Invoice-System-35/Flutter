@@ -18,7 +18,7 @@ class Services {
     if (_dio == null) {
       _dio = Dio(
         BaseOptions(
-          baseUrl: '-',
+          baseUrl: 'http://api.calorilin.me/',
         ),
       );
     }
@@ -26,8 +26,8 @@ class Services {
   Services._assignToken([String? token]) {
     _dio = Dio(
       BaseOptions(
-        baseUrl: '-',
-        headers: token != null ? {'authorization': 'Bearer $token'} : null,
+        baseUrl: 'http://api.calorilin.me/',
+        headers: token != null ? {'Authorization': 'Bearer $token'} : null,
       ),
     );
   }

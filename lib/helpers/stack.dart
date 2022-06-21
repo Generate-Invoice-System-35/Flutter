@@ -9,6 +9,8 @@ class StackList<E> {
 
   E pop() => _list.removeLast();
 
+  void clear() => _list.clear();
+
   E get peek => _list.last;
 
   bool get isEmpty => _list.isEmpty;

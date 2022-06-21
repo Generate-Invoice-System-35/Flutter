@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_capstone_project/helpers/providers/fragment_manager.dart';
 import 'package:flutter_capstone_project/utils/color.constant.dart';
 import 'package:flutter_capstone_project/utils/typography.constant.dart';
 import 'package:flutter_capstone_project/widgets/common/gradient_button.dart';
 import 'package:flutter_capstone_project/widgets/common/table.dart';
-import 'package:flutter_capstone_project/widgets/inputs/search_input.dart';
+import 'package:flutter_capstone_project/widgets/inputs/borderless_input.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +18,12 @@ class InvoicesFragment extends StatefulWidget {
 class _InvoicesFragmentState extends State<InvoicesFragment> {
   void onNavigateUpload(BuildContext context) {
     context.read<FragmentManager>().navigateToFragment(fragmentEnum: FragmentEnum.uploadFragment);
+  }
+
+  void onNavigateGenerate(BuildContext context) {
+    context
+        .read<FragmentManager>()
+        .navigateToFragment(fragmentEnum: FragmentEnum.sendInvoicesFragment);
   }
 
   @override
@@ -47,7 +51,7 @@ class _InvoicesFragmentState extends State<InvoicesFragment> {
               ),
               const SizedBox(width: 8),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () => onNavigateGenerate(context),
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.fromLTRB(17, 9, 18, 10),
                   primary: ColorConstant.darkBlue,
@@ -62,9 +66,10 @@ class _InvoicesFragmentState extends State<InvoicesFragment> {
               ),
             ],
           ),
-          const SizedBox(height: 18),
-          SearchInput(
+          const SizedBox(height: 4),
+          BorderlessInput(
             placeholder: "Search...",
+            suffixIcon: SvgPicture.asset('assets/icons/search.svg'),
           ),
           const SizedBox(height: 0),
           Row(

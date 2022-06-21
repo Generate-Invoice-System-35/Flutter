@@ -12,6 +12,7 @@ enum FragmentEnum {
   onboardingFragment,
   invoiceFragment,
   uploadFragment,
+  sendInvoicesFragment,
   none,
 }
 
@@ -37,6 +38,11 @@ class FragmentManager with ChangeNotifier {
   List<BottomBar> get pages => _pages;
 
   List<StackList<FragmentEnum>> activeFragment = List.generate(3, (index) => StackList());
+
+  void clearAll() {
+    List.generate(pages.length, (idx) => {activeFragment[idx].clear()});
+    notifyListeners();
+  }
 
   void navigateToFragment({required FragmentEnum fragmentEnum}) {
     activeFragment[untrackedCurrentIdx].push(fragmentEnum);

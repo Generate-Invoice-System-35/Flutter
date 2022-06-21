@@ -4,6 +4,7 @@ import 'package:flutter_capstone_project/helpers/providers/fragment_manager.dart
 import 'package:flutter_capstone_project/helpers/validators.dart';
 import 'package:flutter_capstone_project/screens/main_screen.dart';
 import 'package:flutter_capstone_project/screens/splash_screen.dart';
+import 'package:flutter_capstone_project/view_models/auth_view_model.dart';
 import 'package:flutter_capstone_project/view_models/token_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +21,7 @@ class MyProvider extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => TokenViewModel()),
         ChangeNotifierProvider(create: (_) => FragmentManager()),
+        ChangeNotifierProvider(create: (_) => AuthViewModel()),
       ],
       child: const MyApp(),
     );
@@ -56,16 +58,13 @@ class _MyAppState extends State<MyApp> {
     return null;
   }
 
-  // Widget getInitialPage(
-  //     {required AsyncSnapshot<Object?> tokenSnapshot,
-  //     required AsyncSnapshot<Object?> userSnapshot}) {
-  //   if (userSnapshot.connectionState == ConnectionState.waiting ||
-  //       tokenSnapshot.connectionState == ConnectionState.waiting) {
-  //     return const SplashScreen();
-  //   }
-  //   if (tokenSnapshot.data != null) return const MainScreen();
-  //   return const LoginScreen();
-  // }
+  Widget getInitialPage({required AsyncSnapshot<Object?> tokenSnapshot}) {
+    if (tokenSnapshot.connectionState == ConnectionState.waiting) {
+      return const SplashScreen();
+    }
+    if (tokenSnapshot.data != null) return const MainScreen();
+    return const MainScreen();
+  }
 
   String? onValidateEmail(String? value) {
     return Validators.email(value) ?? Validators.required(value);
@@ -73,45 +72,29 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(fontFamily: "Poppins"),
-      home: MainScreen(),
-    );
-
-    // return Consumer<TokenViewModel>(
-    //   builder: (_, state, ___) => FutureBuilder(
-    //     future: state.setupToken(),
-    //     builder: (_, tokenSnapshot) {
-    //       return Consumer<UserViewModel>(
-    //         builder: (_, state, __) => FutureBuilder(
-    //           future: state.getMe(),
-    //           builder: (_, userSnapshot) => FutureBuilder(
-    //             future: LocalStorage().get(spKey: 'isNotFirsttime'),
-    //             builder: (_, isNotFirsttimeSnapshot) => MaterialApp(
-    //               title: 'Mini Project Jovin Lidan',
-    //               debugShowCheckedModeBanner: false,
-    //               theme: ThemeData(
-    //                 primarySwatch: Colors.blue,
-    //               ),
-    //               routes: {
-    //                 '/register': (context) => const RegisterScreen(),
-    //                 '/login': (context) => const LoginScreen(),
-    //                 '/create-post': (context) => const CreatePostScreen()
-    //               },
-
-    //               home: getInitialPage(
-    //                   tokenSnapshot: tokenSnapshot,
-    //                   userSnapshot: userSnapshot,
-    //                   isNotFirsttimeSnapshot: isNotFirsttimeSnapshot),
-    //               // initialRoute: '/',
-    //               onGenerateRoute: onGenerateRoute,
-    //             ),
-    //           ),
-    //         ),
-    //       );
-    //     },
-    //   ),
+    // return MaterialApp(
+    //   debugShowCheckedModeBanner: false,
+    //   theme: ThemeData(fontFamily: "Poppins"),
+    //   home: MainScreen(),
     // );
+
+    return Consumer<TokenViewModel>(
+      builder: (_, state, ___) => FutureBuilder(
+        future: state.setupToken(),
+        builder: (_, tokenSnapshot) {
+          return MaterialApp(
+            theme: ThemeData(fontFamily: "Poppins"),
+            debugShowCheckedModeBanner: false,
+            routes: {},
+
+            home: getInitialPage(
+              tokenSnapshot: tokenSnapshot,
+            ),
+            // initialRoute: '/',
+            onGenerateRoute: onGenerateRoute,
+          );
+        },
+      ),
+    );
   }
 }

@@ -1,32 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_capstone_project/helpers/providers/form_manager.dart';
 import 'package:flutter_capstone_project/utils/color.constant.dart';
 import 'package:flutter_capstone_project/utils/typography.constant.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
-class SearchInput extends StatefulWidget {
+class BorderlessInput extends StatefulWidget {
   String? placeholder;
   IconData? prefixIcon;
-  IconData? suffixIcon;
+  Widget? suffixIcon;
+  Widget? label;
   String? Function(String? val)? onValidate;
   void Function(TextEditingController tec)? onSuffixIconPress;
 
-  SearchInput({
+  BorderlessInput({
     Key? key,
     this.prefixIcon,
     this.suffixIcon,
     this.placeholder,
     this.onValidate,
     this.onSuffixIconPress,
+    this.label,
   }) : super(key: key);
 
   @override
-  State<SearchInput> createState() => _SearchInputState();
+  State<BorderlessInput> createState() => _BorderlessInputState();
 }
 
-class _SearchInputState extends State<SearchInput> {
+class _BorderlessInputState extends State<BorderlessInput> {
   TextEditingController textEditingController = TextEditingController();
 
   @override
@@ -39,20 +38,20 @@ class _SearchInputState extends State<SearchInput> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          height: 50,
-          decoration: BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                width: 2,
-                color: ColorConstant.orangeSolid,
-              ),
-            ),
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            width: 2,
+            color: ColorConstant.orangeSolid,
           ),
-          child: Row(
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          widget.label ?? const SizedBox.shrink(),
+          Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -66,10 +65,10 @@ class _SearchInputState extends State<SearchInput> {
                 child: TextField(
                   controller: textEditingController,
                   onChanged: (val) => _onChange(val, context),
-                  style: TypographyConstant.input.merge(const TextStyle(height: 1.4)),
+                  // style: TypographyConstant.input.merge(const TextStyle(height: 1.4)),
                   decoration: InputDecoration(
                     hintText: widget.placeholder,
-                    hintStyle: TypographyConstant.input.merge(const TextStyle(height: 1)),
+                    // hintStyle: TypographyConstant.input.merge(const TextStyle(height: 1)),
                     border: InputBorder.none,
                     errorStyle: const TextStyle(height: 0, color: Colors.transparent),
                   ),
@@ -78,22 +77,18 @@ class _SearchInputState extends State<SearchInput> {
               const SizedBox(
                 width: 8,
               ),
-              // widget.suffixIcon != null
-              //     ? IconButton(
-              //         onPressed: widget.onSuffixIconPress == null
-              //             ? null
-              //             : () => widget.onSuffixIconPress!(textEditingController),
-              //         icon: Icon(widget.suffixIcon, size: 24),
-              //       )
-              //     : const SizedBox.shrink(),
-              SvgPicture.asset('assets/icons/search.svg'),
-              const SizedBox(
-                width: 8,
-              ),
+              widget.suffixIcon != null
+                  ? IconButton(
+                      onPressed: widget.onSuffixIconPress == null
+                          ? null
+                          : () => widget.onSuffixIconPress!(textEditingController),
+                      icon: widget.suffixIcon!,
+                    )
+                  : const SizedBox.shrink(),
             ],
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

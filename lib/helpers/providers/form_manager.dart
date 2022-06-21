@@ -3,6 +3,11 @@ import 'package:flutter/material.dart';
 class FormManager with ChangeNotifier {
   final _fieldStates = <String, FormFieldState>{};
 
+  List<FormFieldState> get erroredFields => _fieldStates.entries
+      .where((s) => (s.value.errorMessage ?? "").isNotEmpty)
+      .map((s) => s.value)
+      .toList();
+
   void setValue(String key, String? newValue) {
     _ensureExists(key);
     WidgetsBinding.instance.addPostFrameCallback((_) {

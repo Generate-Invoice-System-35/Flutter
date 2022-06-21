@@ -2,6 +2,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_capstone_project/helpers/providers/fragment_manager.dart';
 import 'package:flutter_capstone_project/widgets/fragments/dashboard_fragment/components/invoices_fragment.dart';
+import 'package:flutter_capstone_project/widgets/fragments/dashboard_fragment/components/send_invoices_fragment.dart';
 import 'package:flutter_capstone_project/widgets/fragments/dashboard_fragment/components/upload_fragment.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +21,8 @@ class _DashboardFragmentState extends State<DashboardFragment> {
     switch (fragmentEnum) {
       case FragmentEnum.uploadFragment:
         return UploadFragment();
+      case FragmentEnum.sendInvoicesFragment:
+        return SendInvoicesFragment();
       default:
         return InvoicesFragment();
     }

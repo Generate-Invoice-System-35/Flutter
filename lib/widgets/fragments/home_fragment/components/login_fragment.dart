@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_capstone_project/helpers/form_helper.dart';
 import 'package:flutter_capstone_project/helpers/providers/form_manager.dart';
+import 'package:flutter_capstone_project/helpers/providers/fragment_manager.dart';
+import 'package:flutter_capstone_project/model/auth_model.dart';
+import 'package:flutter_capstone_project/services/services.dart';
 import 'package:flutter_capstone_project/utils/color.constant.dart';
 import 'package:flutter_capstone_project/utils/shadow.constant.dart';
 import 'package:flutter_capstone_project/utils/typography.constant.dart';
+import 'package:flutter_capstone_project/view_models/auth_view_model.dart';
+import 'package:flutter_capstone_project/view_models/token_view_model.dart';
 import 'package:flutter_capstone_project/widgets/common/fragment_back_button.dart';
 import 'package:flutter_capstone_project/widgets/inputs/password_input.dart';
 import 'package:flutter_capstone_project/widgets/inputs/text_input.dart';
+import 'package:provider/provider.dart';
 
 class LoginFragment extends StatefulWidget {
   const LoginFragment({Key? key}) : super(key: key);
@@ -17,6 +23,24 @@ class LoginFragment extends StatefulWidget {
 
 class _LoginFragmentState extends State<LoginFragment> {
   final FormManager _formManager = FormManager();
+
+  void onSubmit(BuildContext context) async {
+    if (_formManager.erroredFields.isEmpty) {
+      final LoginInput input = LoginInput(
+          username: _formManager.getValue('username'), password: _formManager.getValue('password'));
+
+      final res = await Provider.of<AuthViewModel>(context, listen: false).login(input: input);
+      if (res.status == ApiStatus.success && res.data != null) {
+        await Provider.of<TokenViewModel>(context, listen: false).setToken(token: res.data!);
+        Navigator.pushNamed(context, '/');
+        Provider.of<FragmentManager>(context, listen: false).clearAll();
+      } else {
+        if (res.message != null) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(res.message!)));
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +101,7 @@ class _LoginFragmentState extends State<LoginFragment> {
                       ),
                       const SizedBox(height: 18),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () => onSubmit(context),
                         child: Container(
                           width: double.infinity,
                           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),

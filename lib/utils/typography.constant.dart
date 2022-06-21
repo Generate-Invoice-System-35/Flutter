@@ -51,4 +51,9 @@ class TypographyConstant {
     fontSize: 14,
     fontWeight: FontWeight.w400,
   );
+
+  static const TextStyle borderlessInputLabel = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+  );
 }
