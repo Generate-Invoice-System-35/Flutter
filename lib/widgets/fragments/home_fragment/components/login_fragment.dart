@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_capstone_project/helpers/form_helper.dart';
 import 'package:flutter_capstone_project/helpers/providers/form_manager.dart';
 import 'package:flutter_capstone_project/helpers/providers/fragment_manager.dart';
+import 'package:flutter_capstone_project/helpers/validators.dart';
 import 'package:flutter_capstone_project/model/auth_model.dart';
 import 'package:flutter_capstone_project/services/services.dart';
 import 'package:flutter_capstone_project/utils/color.constant.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_capstone_project/utils/typography.constant.dart';
 import 'package:flutter_capstone_project/view_models/auth_view_model.dart';
 import 'package:flutter_capstone_project/view_models/token_view_model.dart';
 import 'package:flutter_capstone_project/widgets/common/fragment_back_button.dart';
+import 'package:flutter_capstone_project/widgets/common/gradient_button.dart';
 import 'package:flutter_capstone_project/widgets/inputs/password_input.dart';
 import 'package:flutter_capstone_project/widgets/inputs/text_input.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +25,14 @@ class LoginFragment extends StatefulWidget {
 
 class _LoginFragmentState extends State<LoginFragment> {
   final FormManager _formManager = FormManager();
+
+  String? onValidateUsername(String? value) {
+    return Validators.required(value);
+  }
+
+  String? onValidatePassword(String? value) {
+    return Validators.required(value);
+  }
 
   void onSubmit(BuildContext context) async {
     if (_formManager.erroredFields.isEmpty) {
@@ -92,29 +102,28 @@ class _LoginFragmentState extends State<LoginFragment> {
                         placeholder: "Username",
                         label: "Username",
                         name: "username",
+                        onValidate: onValidateUsername,
                       ),
                       const SizedBox(height: 20),
                       PasswordInput(
                         name: "password",
                         label: "Password",
                         placeholder: "******",
+                        onValidate: onValidatePassword,
                       ),
                       const SizedBox(height: 18),
-                      GestureDetector(
+                      GradientButton(
+                        "SIGN IN",
+                        width: double.infinity,
+                        loading: context.watch<AuthViewModel>().token.status == ApiStatus.loading,
+                        height: 40,
+                        gradient: ColorConstant.orangeGradient,
                         onTap: () => onSubmit(context),
-                        child: Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                          decoration: BoxDecoration(
-                              gradient: ColorConstant.orangeGradient,
-                              borderRadius: const BorderRadius.all(Radius.circular(10))),
-                          child: Text(
-                            'SIGN IN',
-                            textAlign: TextAlign.center,
-                            style: TypographyConstant.button2
-                                .merge(const TextStyle(color: Colors.white)),
-                          ),
-                        ),
+                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                        boxShadow: [ShadowConstant.boxShadow1],
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                        textStyle:
+                            TypographyConstant.button2.merge(TextStyle(color: ColorConstant.white)),
                       ),
                     ],
                   ),

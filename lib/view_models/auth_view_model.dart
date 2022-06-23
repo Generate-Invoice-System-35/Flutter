@@ -14,6 +14,10 @@ class AuthViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void logout() async {
+    changeState(ApiResponse(status: ApiStatus.success, data: null));
+  }
+
   Future<ApiResponse<String?>> register({required RegisterInput input}) async {
     try {
       changeState(ApiResponse(status: ApiStatus.loading));

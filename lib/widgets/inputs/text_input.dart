@@ -40,13 +40,14 @@ class _TextInputState extends State<TextInput> {
 
   void _onChange(String? value, BuildContext context) {
     context.read<FormManager>().setValue(widget.name, value);
-    if (widget.onValidate != null) {
-      context.read<FormManager>().setErrorMessage(widget.name, widget.onValidate!(value));
-    }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (widget.onValidate != null) {
+      context.read<FormManager>().setErrorMessage(
+          widget.name, widget.onValidate!(context.read<FormManager>().getValue(widget.name)));
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

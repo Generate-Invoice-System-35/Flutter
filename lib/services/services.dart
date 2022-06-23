@@ -19,6 +19,9 @@ class Services {
       _dio = Dio(
         BaseOptions(
           baseUrl: 'http://api.calorilin.me/',
+          validateStatus: (status) {
+            return (status ?? 0) < 500;
+          },
         ),
       );
     }
@@ -28,6 +31,9 @@ class Services {
       BaseOptions(
         baseUrl: 'http://api.calorilin.me/',
         headers: token != null ? {'Authorization': 'Bearer $token'} : null,
+        validateStatus: (status) {
+          return (status ?? 0) < 500;
+        },
       ),
     );
   }

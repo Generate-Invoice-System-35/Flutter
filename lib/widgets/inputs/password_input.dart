@@ -52,15 +52,16 @@ class _PasswordInputState extends State<PasswordInput> {
 
   void _onChange(String? value, BuildContext context) {
     context.read<FormManager>().setValue(widget.name, value);
-    if (widget.onValidate != null) {
-      context.read<FormManager>().setErrorMessage(widget.name, widget.onValidate!(value));
-    }
   }
 
   void _onToggleObscure() => setState(() => _obscureText = !_obscureText);
 
   @override
   Widget build(BuildContext context) {
+    if (widget.onValidate != null) {
+      context.read<FormManager>().setErrorMessage(
+          widget.name, widget.onValidate!(context.read<FormManager>().getValue(widget.name)));
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

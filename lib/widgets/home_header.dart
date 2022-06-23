@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_capstone_project/helpers/providers/fragment_manager.dart';
+import 'package:flutter_capstone_project/services/services.dart';
 import 'package:flutter_capstone_project/utils/color.constant.dart';
 import 'package:flutter_capstone_project/utils/shadow.constant.dart';
 import 'package:flutter_capstone_project/utils/typography.constant.dart';
+import 'package:flutter_capstone_project/view_models/auth_view_model.dart';
+import 'package:flutter_capstone_project/view_models/token_view_model.dart';
 import 'package:flutter_capstone_project/widgets/common/gradient_button.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +18,11 @@ class HomeHeader extends StatelessWidget {
 
   void onNavigateRegister(BuildContext context) {
     context.read<FragmentManager>().navigateToFragment(fragmentEnum: FragmentEnum.registerFragment);
+  }
+
+  void _handleLogout(BuildContext context) {
+    Services.assignToken(null);
+    context.read<AuthViewModel>().logout();
   }
 
   @override
@@ -81,29 +89,42 @@ class HomeHeader extends StatelessWidget {
             right: 0,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GradientButton(
-                  "Sign Up",
-                  gradient: ColorConstant.greyGradient,
-                  onTap: () => onNavigateRegister(context),
-                  borderRadius: const BorderRadius.all(Radius.circular(16)),
-                  boxShadow: [ShadowConstant.boxShadow1],
-                  padding: const EdgeInsets.symmetric(horizontal: 27, vertical: 14),
-                  textStyle:
-                      TypographyConstant.button1.merge(TextStyle(color: ColorConstant.darkBlue)),
-                ),
-                const SizedBox(width: 46),
-                GradientButton(
-                  "Sign In",
-                  gradient: ColorConstant.orangeGradient,
-                  onTap: () => onNavigateLogin(context),
-                  borderRadius: const BorderRadius.all(Radius.circular(16)),
-                  boxShadow: [ShadowConstant.boxShadow1],
-                  padding: const EdgeInsets.symmetric(horizontal: 27, vertical: 14),
-                  textStyle:
-                      TypographyConstant.button1.merge(TextStyle(color: ColorConstant.white)),
-                ),
-              ],
+              children: context.watch<AuthViewModel>().token.data == null
+                  ? [
+                      GradientButton(
+                        "Sign Up",
+                        gradient: ColorConstant.greyGradient,
+                        onTap: () => onNavigateRegister(context),
+                        borderRadius: const BorderRadius.all(Radius.circular(16)),
+                        boxShadow: [ShadowConstant.boxShadow1],
+                        padding: const EdgeInsets.symmetric(horizontal: 27, vertical: 14),
+                        textStyle: TypographyConstant.button1
+                            .merge(TextStyle(color: ColorConstant.darkBlue)),
+                      ),
+                      const SizedBox(width: 46),
+                      GradientButton(
+                        "Sign In",
+                        gradient: ColorConstant.orangeGradient,
+                        onTap: () => onNavigateLogin(context),
+                        borderRadius: const BorderRadius.all(Radius.circular(16)),
+                        boxShadow: [ShadowConstant.boxShadow1],
+                        padding: const EdgeInsets.symmetric(horizontal: 27, vertical: 14),
+                        textStyle:
+                            TypographyConstant.button1.merge(TextStyle(color: ColorConstant.white)),
+                      ),
+                    ]
+                  : [
+                      GradientButton(
+                        "Log Out",
+                        gradient: ColorConstant.orangeGradient,
+                        onTap: () => _handleLogout(context),
+                        borderRadius: const BorderRadius.all(Radius.circular(16)),
+                        boxShadow: [ShadowConstant.boxShadow1],
+                        padding: const EdgeInsets.symmetric(horizontal: 27, vertical: 14),
+                        textStyle:
+                            TypographyConstant.button1.merge(TextStyle(color: ColorConstant.white)),
+                      ),
+                    ],
             ),
           ),
         ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_capstone_project/utils/color.constant.dart';
 import 'package:flutter_capstone_project/utils/typography.constant.dart';
 
 class GradientButton extends StatelessWidget {
@@ -10,8 +11,10 @@ class GradientButton extends StatelessWidget {
   final EdgeInsetsGeometry padding;
   final String text;
   final double? height;
+  final double? width;
+  bool loading;
 
-  const GradientButton(
+  GradientButton(
     this.text, {
     Key? key,
     this.boxShadow,
@@ -19,6 +22,8 @@ class GradientButton extends StatelessWidget {
     this.textStyle = TypographyConstant.button1,
     this.padding = EdgeInsets.zero,
     this.height,
+    this.width,
+    this.loading = false,
     required this.gradient,
     required this.onTap,
   }) : super(key: key);
@@ -27,6 +32,7 @@ class GradientButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: height,
+      width: width,
       decoration: BoxDecoration(
         gradient: gradient,
         boxShadow: boxShadow,
@@ -43,9 +49,26 @@ class GradientButton extends StatelessWidget {
             borderRadius: borderRadius,
           ),
         ),
-        child: Text(
-          text,
-          style: textStyle,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              text,
+              style: textStyle,
+            ),
+            loading
+                ? Container(
+                    width: 16,
+                    height: 16,
+                    margin: const EdgeInsets.only(left: 8),
+                    child: CircularProgressIndicator(
+                      backgroundColor: ColorConstant.white,
+                      color: ColorConstant.orangeLight,
+                      strokeWidth: 2,
+                    ),
+                  )
+                : const SizedBox.shrink(),
+          ],
         ),
       ),
     );
