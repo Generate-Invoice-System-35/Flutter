@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_capstone_project/helpers/providers/form_manager.dart';
 import 'package:flutter_capstone_project/helpers/providers/fragment_manager.dart';
+import 'package:flutter_capstone_project/helpers/providers/overlay_manager.dart';
 import 'package:flutter_capstone_project/helpers/validators.dart';
 import 'package:flutter_capstone_project/screens/main_screen.dart';
 import 'package:flutter_capstone_project/screens/splash_screen.dart';
@@ -22,6 +23,7 @@ class MyProvider extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => TokenViewModel()),
         ChangeNotifierProvider(create: (_) => FragmentManager()),
         ChangeNotifierProvider(create: (_) => AuthViewModel()),
+        ChangeNotifierProvider(create: (_) => OverlayManager()),
       ],
       child: const MyApp(),
     );

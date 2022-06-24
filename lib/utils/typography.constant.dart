@@ -56,4 +56,9 @@ class TypographyConstant {
     fontSize: 14,
     fontWeight: FontWeight.w600,
   );
+
+  static const TextStyle emailSent = TextStyle(
+    fontSize: 32,
+    fontWeight: FontWeight.w700,
+  );
 }

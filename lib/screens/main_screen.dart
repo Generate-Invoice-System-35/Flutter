@@ -1,16 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_capstone_project/helpers/providers/fragment_manager.dart';
-import 'package:flutter_capstone_project/utils/color.constant.dart';
 import 'package:flutter_capstone_project/widgets/bottom_navigator.dart';
-import 'package:flutter_capstone_project/widgets/fragments/dashboard_fragment/index.dart';
-import 'package:flutter_capstone_project/widgets/fragments/home_fragment/index.dart';
-import 'package:flutter_capstone_project/widgets/fragments/profile_fragment/index.dart';
-import 'package:flutter_capstone_project/widgets/home_carousel.dart';
-import 'package:flutter_capstone_project/widgets/home_header.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_capstone_project/widgets/common/overlay_handler.dart';
 import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
@@ -41,30 +32,36 @@ class _MainScreenState extends State<MainScreen> {
     final List<BottomBar> pages = context.read<FragmentManager>().pages;
 
     // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent));
-    return Scaffold(
-      body: WillPopScope(
-        onWillPop: () => handleBackPressed(context),
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/images/gradient-bg.png"),
-                  fit: BoxFit.cover,
-                  alignment: Alignment.topCenter,
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Scaffold(
+          body: WillPopScope(
+            onWillPop: () => handleBackPressed(context),
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                Container(
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("assets/images/gradient-bg.png"),
+                      fit: BoxFit.cover,
+                      alignment: Alignment.topCenter,
+                    ),
+                  ),
                 ),
-              ),
+                pages[curPage].child,
+              ],
             ),
-            pages[curPage].child,
-          ],
+          ),
+          bottomNavigationBar: BottomNavigator(
+            pages: pages,
+            curPage: curPage,
+            onChangePage: handleChangePage,
+          ),
         ),
-      ),
-      bottomNavigationBar: BottomNavigator(
-        pages: pages,
-        curPage: curPage,
-        onChangePage: handleChangePage,
-      ),
+        const OverlayHandler(),
+      ],
     );
   }
 }
