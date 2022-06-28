@@ -22,6 +22,7 @@ class _MainScreenState extends State<MainScreen> {
     final bool isEmpty = context.read<FragmentManager>().isEmpty();
     if (isEmpty) {
       Navigator.pop(context);
+      return Future.value(false);
     }
     context.read<FragmentManager>().pop();
     return Future.value(false);

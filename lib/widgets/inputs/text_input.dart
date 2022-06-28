@@ -42,6 +42,12 @@ class _TextInputState extends State<TextInput> {
     context.read<FormManager>().setValue(widget.name, value);
   }
 
+  // @override
+  // void didUpdateWidget(covariant TextInput oldWidget) {
+  //   print(oldWidget);
+  //   super.didUpdateWidget(oldWidget);
+  // }
+
   @override
   Widget build(BuildContext context) {
     if (widget.onValidate != null) {

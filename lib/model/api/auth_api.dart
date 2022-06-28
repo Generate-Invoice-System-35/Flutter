@@ -8,9 +8,9 @@ class AuthAPI {
     return await Future.value(response);
   }
 
-  static Future<String> register({required RegisterInput input}) async {
+  static Future<RegisterResult> register({required RegisterInput input}) async {
     Services repo = Services();
     final response = await repo.post(url: 'register', data: input);
-    return await Future.value(response);
+    return await Future.value(RegisterResult.fromJson(response));
   }
 }

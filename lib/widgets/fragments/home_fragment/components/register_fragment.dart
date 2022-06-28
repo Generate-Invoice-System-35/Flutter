@@ -30,11 +30,12 @@ class _RegisterFragmentState extends State<RegisterFragment> {
     if (_formManager.erroredFields.isEmpty) {
       final RegisterInput input = RegisterInput(
           username: _formManager.getValue('username'), password: _formManager.getValue('password'));
-      print("asd");
       final res = await Provider.of<AuthViewModel>(context, listen: false).register(input: input);
-      print(res.data);
-      if (res.status == ApiStatus.success && res.data != null) {
+      if (res.status == ApiStatus.success) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Register Success")));
+        Provider.of<FragmentManager>(context, listen: false).pop();
+        Provider.of<FragmentManager>(context, listen: false)
+            .navigateToFragment(fragmentEnum: FragmentEnum.loginFragment);
       } else {
         if (res.message != null) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(res.message!)));
