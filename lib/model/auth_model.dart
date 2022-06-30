@@ -29,13 +29,13 @@ class RegisterResult {
   RegisterResult({this.messages, this.users});
 
   RegisterResult.fromJson(Map<String, dynamic> json) {
-    messages = json['messages'];
+    messages = json['message'];
     users = json['users'] != null ? Users.fromJson(json['users']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['messages'] = messages;
+    data['message'] = messages;
     if (users != null) {
       data['users'] = users!.toJson();
     }

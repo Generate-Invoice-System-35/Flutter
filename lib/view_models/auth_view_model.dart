@@ -28,7 +28,7 @@ class AuthViewModel extends ChangeNotifier {
     } catch (e) {
       if (e is DioError) {
         if (e.response?.data != null) {
-          changeState(ApiResponse(status: ApiStatus.error, message: e.response?.data['messages']));
+          changeState(ApiResponse(status: ApiStatus.error, message: e.response?.data['message']));
         }
       } else {
         changeState(ApiResponse(status: ApiStatus.error, message: "Error"));
@@ -45,7 +45,7 @@ class AuthViewModel extends ChangeNotifier {
     } catch (e) {
       if (e is DioError) {
         if (e.response?.data != null) {
-          changeState(ApiResponse(status: ApiStatus.error, message: e.response?.data['messages']));
+          changeState(ApiResponse(status: ApiStatus.error, message: e.response?.data['message']));
         }
       } else {
         changeState(ApiResponse(status: ApiStatus.error, message: "Error"));

@@ -31,6 +31,7 @@ class Services {
       BaseOptions(
         baseUrl: 'http://api.calorilin.me/',
         headers: token != null ? {'Authorization': 'Bearer $token'} : null,
+
         // validateStatus: (status) {
         //   return (status ?? 0) < 500;
         // },
@@ -50,8 +51,13 @@ class Services {
     return Future.value(res?.data);
   }
 
-  Future<dynamic>? post<T>({required String url, required T data}) async {
-    Response<dynamic>? res = await _dio?.post(url, data: data);
+  Future<dynamic>? post<T>(
+      {required String url, required T data, void Function(int, int)? onSendProgress}) async {
+    Response<dynamic>? res = await _dio?.post(
+      url,
+      data: data,
+      onSendProgress: onSendProgress,
+    );
     return Future.value(res?.data);
   }
 }

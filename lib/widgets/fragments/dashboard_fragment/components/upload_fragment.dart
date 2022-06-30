@@ -1,11 +1,17 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_capstone_project/services/services.dart';
 import 'package:flutter_capstone_project/utils/color.constant.dart';
 import 'package:flutter_capstone_project/utils/typography.constant.dart';
+import 'package:flutter_capstone_project/view_models/generate_view_model.dart';
 import 'package:flutter_capstone_project/widgets/common/file_upload_indicator.dart';
 import 'package:flutter_capstone_project/widgets/common/fragment_back_button.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 class UploadFragment extends StatefulWidget {
   const UploadFragment({Key? key}) : super(key: key);
@@ -15,10 +21,36 @@ class UploadFragment extends StatefulWidget {
 }
 
 class _UploadFragmentState extends State<UploadFragment> {
-  void handlePickFile() async {
-    FilePickerResult? res = await FilePicker.platform
+  String? fileName;
+  double percent = 0;
+  void handlePickFile(BuildContext context) async {
+    FilePickerResult? filePickerRes = await FilePicker.platform
         .pickFiles(type: FileType.custom, allowedExtensions: ['pdf', 'csv']);
-    print(res);
+    if (filePickerRes != null) {
+      File file = File(filePickerRes.files.single.path!);
+      String fileNameLocal = file.path.split('/')[file.path.split('/').length - 1];
+      setState(() {
+        fileName = fileNameLocal;
+      });
+      FormData formData = FormData.fromMap({
+        'file': await MultipartFile.fromFile(file.path),
+      });
+      final res = await Provider.of<GenerateViewModel>(context, listen: false).generate(
+          formData: formData,
+          onSendProgress: (start, end) {
+            setState(() {
+              percent = start / end;
+            });
+          });
+      if (res.status != ApiStatus.success)
+        setState(() {
+          fileName = null;
+        });
+      print(res.data?.messages);
+      print(res.message);
+      print(res.data);
+    }
+    // print(res);
   }
 
   @override
@@ -33,7 +65,7 @@ class _UploadFragmentState extends State<UploadFragment> {
             ),
             const SizedBox(height: 25),
             InkWell(
-              onTap: handlePickFile,
+              onTap: () => handlePickFile(context),
               child: DottedBorder(
                 color: ColorConstant.orangeSolid,
                 strokeWidth: 1,
@@ -68,13 +100,12 @@ class _UploadFragmentState extends State<UploadFragment> {
               ),
             ),
             const SizedBox(height: 36),
-            const FileUploadIndicator(
-              filename: "customerdata.xls",
-            ),
-            const SizedBox(height: 20),
-            const FileUploadIndicator(
-              filename: "customerdata.xls",
-            ),
+            fileName != null
+                ? FileUploadIndicator(
+                    filename: fileName!,
+                    percent: percent,
+                  )
+                : const SizedBox.shrink(),
           ],
         ));
   }
