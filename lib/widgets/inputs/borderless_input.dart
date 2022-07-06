@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_capstone_project/utils/color.constant.dart';
-import 'package:flutter_capstone_project/utils/typography.constant.dart';
 
 // ignore: must_be_immutable
 class BorderlessInput extends StatefulWidget {
@@ -8,6 +7,8 @@ class BorderlessInput extends StatefulWidget {
   IconData? prefixIcon;
   Widget? suffixIcon;
   Widget? label;
+  String? value;
+  void Function(String val)? onChange;
   String? Function(String? val)? onValidate;
   void Function(TextEditingController tec)? onSuffixIconPress;
 
@@ -19,6 +20,8 @@ class BorderlessInput extends StatefulWidget {
     this.onValidate,
     this.onSuffixIconPress,
     this.label,
+    this.value,
+    this.onChange,
   }) : super(key: key);
 
   @override
@@ -33,8 +36,6 @@ class _BorderlessInputState extends State<BorderlessInput> {
     textEditingController.dispose();
     super.dispose();
   }
-
-  void _onChange(String? value, BuildContext context) {}
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +65,8 @@ class _BorderlessInputState extends State<BorderlessInput> {
               Flexible(
                 child: TextField(
                   controller: textEditingController,
-                  onChanged: (val) => _onChange(val, context),
+                  onChanged: widget.onChange,
+
                   // style: TypographyConstant.input.merge(const TextStyle(height: 1.4)),
                   decoration: InputDecoration(
                     hintText: widget.placeholder,

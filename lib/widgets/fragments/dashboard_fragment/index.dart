@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_capstone_project/helpers/providers/fragment_manager.dart';
 import 'package:flutter_capstone_project/view_models/auth_view_model.dart';
 import 'package:flutter_capstone_project/view_models/token_view_model.dart';
+import 'package:flutter_capstone_project/widgets/fragments/dashboard_fragment/components/invoice_items_fragment.dart';
 import 'package:flutter_capstone_project/widgets/fragments/dashboard_fragment/components/invoices_fragment.dart';
 import 'package:flutter_capstone_project/widgets/fragments/dashboard_fragment/components/send_invoices_fragment.dart';
 import 'package:flutter_capstone_project/widgets/fragments/dashboard_fragment/components/upload_fragment.dart';
@@ -30,6 +31,8 @@ class _DashboardFragmentState extends State<DashboardFragment> {
         return UploadFragment();
       case FragmentEnum.sendInvoicesFragment:
         return SendInvoicesFragment();
+      case FragmentEnum.invoiceItemsFragment:
+        return InvoiceItemsFragment();
       default:
         return InvoicesFragment();
     }

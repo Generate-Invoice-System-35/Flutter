@@ -1,9 +1,15 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_capstone_project/helpers/providers/fragment_manager.dart';
+import 'package:flutter_capstone_project/model/invoice_model.dart';
+import 'package:flutter_capstone_project/services/services.dart';
 import 'package:flutter_capstone_project/utils/color.constant.dart';
 import 'package:flutter_capstone_project/utils/typography.constant.dart';
+import 'package:flutter_capstone_project/view_models/invoices_view_model.dart';
 import 'package:flutter_capstone_project/widgets/common/gradient_button.dart';
-import 'package:flutter_capstone_project/widgets/common/table.dart';
+import 'package:flutter_capstone_project/widgets/invoice_table.dart';
+import 'package:flutter_capstone_project/widgets/filter_dropdown.dart';
 import 'package:flutter_capstone_project/widgets/inputs/borderless_input.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -16,14 +22,33 @@ class InvoicesFragment extends StatefulWidget {
 }
 
 class _InvoicesFragmentState extends State<InvoicesFragment> {
+  String? searchQuery;
+  Map<int, bool> checks = {};
+
+  void changeChecksOnIdx(int idx, bool state) {
+    checks[idx] = state;
+    return;
+  }
+
   void onNavigateUpload(BuildContext context) {
     context.read<FragmentManager>().navigateToFragment(fragmentEnum: FragmentEnum.uploadFragment);
   }
 
-  void onNavigateGenerate(BuildContext context) {
+  void onNavigateGenerate(BuildContext context) async {
+    ApiResponse<List<Invoice>> res =
+        await Provider.of<InvoicesViewModel>(context, listen: false).getInvoices();
+    List<int> ids = [];
+    if (res.data != null) {
+      checks.forEach((key, value) {
+        if (value) {
+          ids.add(res.data?[key].id ?? 0);
+        }
+      });
+    }
+
     context
         .read<FragmentManager>()
-        .navigateToFragment(fragmentEnum: FragmentEnum.sendInvoicesFragment);
+        .navigateToFragment(fragmentEnum: FragmentEnum.invoiceItemsFragment, invoiceIdsParam: ids);
   }
 
   @override
@@ -50,39 +75,48 @@ class _InvoicesFragmentState extends State<InvoicesFragment> {
                 height: 40,
               ),
               const SizedBox(width: 8),
-              ElevatedButton(
-                onPressed: () => onNavigateGenerate(context),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.fromLTRB(17, 9, 18, 10),
-                  primary: ColorConstant.darkBlue,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(16)),
-                  ),
-                ),
-                child: Text(
-                  "Generate",
-                  style: TypographyConstant.button1.merge(const TextStyle(color: Colors.white)),
-                ),
-              ),
+              checks.containsValue(true)
+                  ? ElevatedButton(
+                      onPressed: () => onNavigateGenerate(context),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.fromLTRB(17, 9, 18, 10),
+                        primary: ColorConstant.darkBlue,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(16)),
+                        ),
+                      ),
+                      child: Text(
+                        "Generate",
+                        style:
+                            TypographyConstant.button1.merge(const TextStyle(color: Colors.white)),
+                      ),
+                    )
+                  : const SizedBox.shrink(),
             ],
           ),
           const SizedBox(height: 4),
           BorderlessInput(
             placeholder: "Search...",
             suffixIcon: SvgPicture.asset('assets/icons/search.svg'),
+            onChange: (val) {
+              setState(() {
+                searchQuery = val;
+              });
+            },
           ),
           const SizedBox(height: 0),
           Row(
             children: [
-              TextButton.icon(
-                style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                onPressed: () {},
-                icon: SvgPicture.asset('assets/icons/filter.svg'),
-                label: Text(
-                  'Filters',
-                  style: TypographyConstant.button3.merge(const TextStyle(color: Colors.black)),
-                ),
-              ),
+              // TextButton.icon(
+              //   style: TextButton.styleFrom(padding: EdgeInsets.zero),
+              //   onPressed: () {},
+              //   icon: SvgPicture.asset('assets/icons/filter.svg'),
+              //   label: Text(
+              //     'Filters',
+              //     style: TypographyConstant.button3.merge(const TextStyle(color: Colors.black)),
+              //   ),
+              // ),
+              const FilterDropdown(),
               const SizedBox(width: 28),
               TextButton.icon(
                 style: TextButton.styleFrom(padding: EdgeInsets.zero),
@@ -115,7 +149,13 @@ class _InvoicesFragmentState extends State<InvoicesFragment> {
             ],
           ),
           const SizedBox(height: 20),
-          const TableComponent(tableHeight: 500),
+          InvoiceTable(
+            tableHeight: MediaQuery.of(context).size.height - 350,
+            query: searchQuery,
+            checks: checks,
+            changeChecksOnIdx: changeChecksOnIdx,
+            changeState: setState,
+          ),
         ],
       ),
     );

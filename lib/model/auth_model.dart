@@ -93,18 +93,32 @@ class LoginInput {
 class RegisterInput {
   String? username;
   String? password;
+  String? name;
+  String? email;
+  String? phoneNumber;
+  String? address;
 
-  RegisterInput({this.username, this.password});
+  RegisterInput(
+      {this.username, this.password, this.address, this.email, this.name, this.phoneNumber});
 
   RegisterInput.fromJson(Map<String, dynamic> json) {
     username = json['username'];
     password = json['password'];
+    name = json['name'];
+    address = json['address'];
+    email = json['email'];
+    phoneNumber = json['phone_number'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['username'] = username;
     data['password'] = password;
+    data['name'] = name;
+    data['email'] = email;
+    data['phone_number'] = phoneNumber;
+    data['address'] = address;
+
     return data;
   }
 }

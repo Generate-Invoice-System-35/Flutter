@@ -13,11 +13,13 @@ enum FragmentEnum {
   invoiceFragment,
   uploadFragment,
   sendInvoicesFragment,
+  invoiceItemsFragment,
   none,
 }
 
 class FragmentManager with ChangeNotifier {
   int untrackedCurrentIdx = 0;
+  List<int> invoiceIds = [];
   final List<BottomBar> _pages = [
     BottomBar(
       icon: SvgPicture.asset('assets/icons/home.svg'),
@@ -44,8 +46,11 @@ class FragmentManager with ChangeNotifier {
     notifyListeners();
   }
 
-  void navigateToFragment({required FragmentEnum fragmentEnum}) {
+  void navigateToFragment({required FragmentEnum fragmentEnum, List<int>? invoiceIdsParam}) {
     activeFragment[untrackedCurrentIdx].push(fragmentEnum);
+    if (invoiceIdsParam != null) {
+      invoiceIds = invoiceIdsParam;
+    }
     notifyListeners();
   }
 

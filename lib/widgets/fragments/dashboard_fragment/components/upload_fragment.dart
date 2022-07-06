@@ -42,10 +42,14 @@ class _UploadFragmentState extends State<UploadFragment> {
               percent = start / end;
             });
           });
-      if (res.status != ApiStatus.success)
+      if (res.status != ApiStatus.success) {
         setState(() {
           fileName = null;
         });
+      }
+      if (res.message != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(res.message!)));
+      }
       print(res.data?.messages);
       print(res.message);
       print(res.data);

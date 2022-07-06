@@ -49,4 +49,11 @@ class ColorConstant {
   static Color backgroundIndicator = HexColor("#D9D9D9");
 
   static Color uploadContainerBg = HexColor("#FFFAF8");
+
+  static Color borderBottomProfile = HexColor("#C5C5C5");
+
+  static Color expiredStatus = HexColor("#FF5247");
+  static Color notPaidStatus = HexColor("#FB7738");
+  static Color pendingStatus = HexColor("#F4C500");
+  static Color paidStatus = HexColor("#30AE04");
 }

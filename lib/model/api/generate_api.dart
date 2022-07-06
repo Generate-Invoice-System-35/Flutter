@@ -6,7 +6,8 @@ class GenerateAPI {
   static Future<MessageResult> generate(
       {required FormData input, void Function(int, int)? onSendProgress}) async {
     Services repo = Services();
-    final response = await repo.post(url: 'generate', data: input, onSendProgress: onSendProgress);
+    final response =
+        await repo.post(url: 'generate/file', data: input, onSendProgress: onSendProgress);
     return await Future.value(MessageResult.fromJson(response));
   }
 }
