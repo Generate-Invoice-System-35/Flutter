@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_capstone_project/services/services.dart';
 import 'package:flutter_capstone_project/utils/color.constant.dart';
 import 'package:flutter_capstone_project/utils/typography.constant.dart';
-import 'package:flutter_capstone_project/view_models/generate_view_model.dart';
+import 'package:flutter_capstone_project/view_models/generate_file_view_model.dart';
 import 'package:flutter_capstone_project/widgets/common/file_upload_indicator.dart';
 import 'package:flutter_capstone_project/widgets/common/fragment_back_button.dart';
 import 'package:flutter_svg/svg.dart';
@@ -35,7 +35,7 @@ class _UploadFragmentState extends State<UploadFragment> {
       FormData formData = FormData.fromMap({
         'file': await MultipartFile.fromFile(file.path),
       });
-      final res = await Provider.of<GenerateViewModel>(context, listen: false).generate(
+      final res = await Provider.of<GenerateFileViewModel>(context, listen: false).generateFile(
           formData: formData,
           onSendProgress: (start, end) {
             setState(() {

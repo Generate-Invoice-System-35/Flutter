@@ -11,7 +11,7 @@ class OverlayManager with ChangeNotifier {
 
   OverlayEnum get currentOverlay => _currentOverlay;
 
-  void navigateToFragment({required OverlayEnum overlayEnum}) {
+  void switchOverlay({required OverlayEnum overlayEnum}) {
     _currentOverlay = overlayEnum;
     notifyListeners();
   }

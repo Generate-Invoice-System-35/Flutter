@@ -16,14 +16,14 @@ import 'package:flutter_capstone_project/widgets/inputs/password_input.dart';
 import 'package:flutter_capstone_project/widgets/inputs/text_input.dart';
 import 'package:provider/provider.dart';
 
-class LoginFragment extends StatefulWidget {
-  const LoginFragment({Key? key}) : super(key: key);
+class MyProfileFragment extends StatefulWidget {
+  const MyProfileFragment({Key? key}) : super(key: key);
 
   @override
-  State<LoginFragment> createState() => _LoginFragmentState();
+  State<MyProfileFragment> createState() => _MyProfileFragmentState();
 }
 
-class _LoginFragmentState extends State<LoginFragment> {
+class _MyProfileFragmentState extends State<MyProfileFragment> {
   final FormManager _formManager = FormManager();
 
   String? onValidateUsername(String? value) {
@@ -50,6 +50,12 @@ class _LoginFragmentState extends State<LoginFragment> {
         }
       }
     }
+  }
+
+  @override
+  void initState() {
+    _formManager.setValue('username', 'jovin');
+    super.initState();
   }
 
   @override
@@ -103,18 +109,37 @@ class _LoginFragmentState extends State<LoginFragment> {
                           placeholder: "Username",
                           label: "Username",
                           name: "username",
+                          defaultValue: "Jovin",
                           onValidate: onValidateUsername,
                         ),
-                        const SizedBox(height: 20),
-                        PasswordInput(
-                          name: "password",
-                          label: "Password",
-                          placeholder: "******",
-                          onValidate: onValidatePassword,
+                        const SizedBox(height: 23),
+                        const SizedBox(
+                          width: double.infinity,
+                          child: Text(
+                            "Password Management",
+                            style: TypographyConstant.h2,
+                            textAlign: TextAlign.start,
+                          ),
                         ),
-                        const SizedBox(height: 18),
+                        const SizedBox(height: 8),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              primary: ColorConstant.textButtonOrange,
+                              padding: EdgeInsets.zero,
+                              minimumSize: Size.zero,
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            ),
+                            onPressed: () {},
+                            child: Text("CHANGE PASSWORD",
+                                style: TypographyConstant.h2
+                                    .merge(TextStyle(decoration: TextDecoration.underline))),
+                          ),
+                        ),
+                        const SizedBox(height: 40),
                         GradientButton(
-                          "SIGN IN",
+                          "EDIT",
                           width: double.infinity,
                           loading: context.watch<AuthViewModel>().token.status == ApiStatus.loading,
                           height: 40,

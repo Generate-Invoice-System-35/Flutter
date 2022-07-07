@@ -14,6 +14,7 @@ enum FragmentEnum {
   uploadFragment,
   sendInvoicesFragment,
   invoiceItemsFragment,
+  myProfileFragment,
   none,
 }
 

@@ -56,4 +56,6 @@ class ColorConstant {
   static Color notPaidStatus = HexColor("#FB7738");
   static Color pendingStatus = HexColor("#F4C500");
   static Color paidStatus = HexColor("#30AE04");
+
+  static Color textButtonOrange = HexColor("#FF7B3C");
 }

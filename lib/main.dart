@@ -6,7 +6,8 @@ import 'package:flutter_capstone_project/helpers/validators.dart';
 import 'package:flutter_capstone_project/screens/main_screen.dart';
 import 'package:flutter_capstone_project/screens/splash_screen.dart';
 import 'package:flutter_capstone_project/view_models/auth_view_model.dart';
-import 'package:flutter_capstone_project/view_models/generate_view_model.dart';
+import 'package:flutter_capstone_project/view_models/generate_file_view_model.dart';
+import 'package:flutter_capstone_project/view_models/generate_invoices_view_model.dart';
 import 'package:flutter_capstone_project/view_models/invoice_view_model.dart';
 import 'package:flutter_capstone_project/view_models/invoices_view_model.dart';
 import 'package:flutter_capstone_project/view_models/token_view_model.dart';
@@ -24,7 +25,8 @@ class MyProvider extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => TokenViewModel()),
-        ChangeNotifierProvider(create: (_) => GenerateViewModel()),
+        ChangeNotifierProvider(create: (_) => GenerateFileViewModel()),
+        ChangeNotifierProvider(create: (_) => GenerateInvoicesViewModel()),
         ChangeNotifierProvider(create: (_) => AuthViewModel()),
         ChangeNotifierProvider(create: (_) => InvoicesViewModel()),
         ChangeNotifierProvider(create: (_) => InvoiceViewModel()),
@@ -88,7 +90,7 @@ class _MyAppState extends State<MyApp> {
 
     return Consumer<TokenViewModel>(
       builder: (_, state, ___) => FutureBuilder(
-        future: state.setupToken(),
+        future: state.setupToken(context),
         builder: (_, tokenSnapshot) {
           return MaterialApp(
             theme: ThemeData(fontFamily: "Poppins"),

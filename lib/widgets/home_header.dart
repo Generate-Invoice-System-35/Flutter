@@ -22,6 +22,7 @@ class HomeHeader extends StatelessWidget {
 
   void _handleLogout(BuildContext context) {
     Services.assignToken(null);
+    context.read<TokenViewModel>().revokeToken();
     context.read<AuthViewModel>().logout();
   }
 

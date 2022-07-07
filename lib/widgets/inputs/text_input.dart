@@ -11,6 +11,7 @@ class TextInput extends StatefulWidget {
   String? placeholder;
   IconData? prefixIcon;
   IconData? suffixIcon;
+  String? defaultValue;
   String? Function(String? val)? onValidate;
   void Function(TextEditingController tec)? onSuffixIconPress;
 
@@ -23,6 +24,7 @@ class TextInput extends StatefulWidget {
     this.placeholder,
     this.onValidate,
     this.onSuffixIconPress,
+    this.defaultValue,
   }) : super(key: key);
 
   @override
@@ -31,6 +33,14 @@ class TextInput extends StatefulWidget {
 
 class _TextInputState extends State<TextInput> {
   TextEditingController textEditingController = TextEditingController();
+
+  @override
+  void initState() {
+    if (widget.defaultValue != null) {
+      textEditingController.text = widget.defaultValue!;
+    }
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -42,11 +52,10 @@ class _TextInputState extends State<TextInput> {
     context.read<FormManager>().setValue(widget.name, value);
   }
 
-  // @override
-  // void didUpdateWidget(covariant TextInput oldWidget) {
-  //   print(oldWidget);
-  //   super.didUpdateWidget(oldWidget);
-  // }
+  @override
+  void didUpdateWidget(covariant TextInput oldWidget) {
+    super.didUpdateWidget(oldWidget);
+  }
 
   @override
   Widget build(BuildContext context) {

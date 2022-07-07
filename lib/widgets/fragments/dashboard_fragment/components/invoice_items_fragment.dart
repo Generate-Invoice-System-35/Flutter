@@ -4,11 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_capstone_project/helpers/providers/fragment_manager.dart';
+import 'package:flutter_capstone_project/helpers/providers/overlay_manager.dart';
+import 'package:flutter_capstone_project/model/common_model.dart';
+import 'package:flutter_capstone_project/model/generate_model.dart';
+import 'package:flutter_capstone_project/services/services.dart';
 import 'package:flutter_capstone_project/utils/color.constant.dart';
 import 'package:flutter_capstone_project/utils/typography.constant.dart';
+import 'package:flutter_capstone_project/view_models/generate_file_view_model.dart';
+import 'package:flutter_capstone_project/view_models/generate_invoices_view_model.dart';
 import 'package:flutter_capstone_project/view_models/invoice_view_model.dart';
 import 'package:flutter_capstone_project/widgets/common/fragment_back_button.dart';
 import 'package:flutter_capstone_project/widgets/common/gradient_button.dart';
+import 'package:flutter_capstone_project/widgets/common/gradient_circular_indicator.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -52,13 +59,23 @@ class InvoiceItemsFragment extends StatefulWidget {
   State<InvoiceItemsFragment> createState() => _InvoiceItemsFragmentState();
 }
 
-class _InvoiceItemsFragmentState extends State<InvoiceItemsFragment> {
+class _InvoiceItemsFragmentState extends State<InvoiceItemsFragment> with TickerProviderStateMixin {
   late List<int> ids;
   int currentIdx = 0;
+  late AnimationController _animationController;
 
   Future<void> refetchInvoice() async {
     await Provider.of<InvoiceViewModel>(context, listen: false)
         .getInvoice(invoiceId: ids[currentIdx]);
+  }
+
+  @override
+  void initState() {
+    _animationController = AnimationController(vsync: this, duration: const Duration(seconds: 2));
+    _animationController.addListener(() => setState(() {}));
+    _animationController.repeat(max: 1);
+    // _animationController.forward();
+    super.initState();
   }
 
   @override
@@ -67,11 +84,26 @@ class _InvoiceItemsFragmentState extends State<InvoiceItemsFragment> {
       ids = Provider.of<FragmentManager>(context, listen: false).invoiceIds;
     });
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      refetchInvoice();
-      // setState(() {});
+      await refetchInvoice();
+      setState(() {});
     });
 
     super.didChangeDependencies();
+  }
+
+  void handleConfirm(BuildContext ctx) async {
+    ApiResponse<MessageResult> res =
+        await Provider.of<GenerateInvoicesViewModel>(ctx, listen: false)
+            .generateInvoices(input: GenerateInvoicesInput(ids: ids));
+    if (res.status == ApiStatus.success) {
+      Provider.of<OverlayManager>(ctx, listen: false)
+          .switchOverlay(overlayEnum: OverlayEnum.emailSentOverlay);
+      await Future.delayed(Duration(seconds: 1));
+      Provider.of<OverlayManager>(ctx, listen: false).switchOverlay(overlayEnum: OverlayEnum.none);
+    } else {
+      ScaffoldMessenger.of(ctx)
+          .showSnackBar(SnackBar(content: Text(res.message ?? "Failed to sent")));
+    }
   }
 
   void onDoubleBackward() async {
@@ -118,32 +150,46 @@ class _InvoiceItemsFragmentState extends State<InvoiceItemsFragment> {
             ),
             const SizedBox(height: 25),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 40),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 40),
               decoration: BoxDecoration(
                   color: ColorConstant.white, borderRadius: BorderRadius.circular(24)),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Customer Invoice", style: TypographyConstant.h3),
-                  Text("Draft", style: TypographyConstant.title),
-                  const SizedBox(height: 32),
-                  LabelValue(
-                      label: "Customer",
-                      value: context.read<InvoiceViewModel>().invoice?.data?.name ?? ""),
-                  const SizedBox(height: 5),
-                  LabelValue(
-                      label: "Invoice Date",
-                      value: DateFormat('dd/MM/yyyy').format(
-                          context.read<InvoiceViewModel>().invoice?.data?.invoiceDate ??
-                              DateTime.now())),
-                  const SizedBox(height: 5),
-                  LabelValue(
-                      label: "Due Date",
-                      value: DateFormat('dd/MM/yyyy').format(
-                          context.read<InvoiceViewModel>().invoice?.data?.dueDate ??
-                              DateTime.now())),
-                ],
-              ),
+              child: context.read<InvoiceViewModel>().invoice?.status == ApiStatus.success
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text("Customer Invoice", style: TypographyConstant.h3),
+                        const Text("Draft", style: TypographyConstant.title),
+                        const SizedBox(height: 32),
+                        LabelValue(
+                            label: "Customer",
+                            value: context.read<InvoiceViewModel>().invoice?.data?.name ?? ""),
+                        const SizedBox(height: 5),
+                        LabelValue(
+                            label: "Invoice Date",
+                            value: DateFormat('dd/MM/yyyy').format(
+                                context.read<InvoiceViewModel>().invoice?.data?.invoiceDate ??
+                                    DateTime.now())),
+                        const SizedBox(height: 5),
+                        LabelValue(
+                            label: "Due Date",
+                            value: DateFormat('dd/MM/yyyy').format(
+                                context.read<InvoiceViewModel>().invoice?.data?.dueDate ??
+                                    DateTime.now())),
+                      ],
+                    )
+                  : Center(
+                      child: RotationTransition(
+                        turns: Tween(begin: 0.0, end: 1.0).animate(_animationController),
+                        child: GradientCircularProgressIndicator(
+                          radius: MediaQuery.of(context).size.width / 10.5,
+                          gradientColors: [
+                            ColorConstant.white,
+                            ColorConstant.orangeSolid,
+                          ],
+                          strokeWidth: 5.0,
+                        ),
+                      ),
+                    ),
             ),
             const SizedBox(height: 12),
             Row(
@@ -153,7 +199,9 @@ class _InvoiceItemsFragmentState extends State<InvoiceItemsFragment> {
                 GradientButton(
                   "Confirm",
                   gradient: ColorConstant.orangeGradient,
-                  onTap: () => {},
+                  loading: context.watch<GenerateInvoicesViewModel>().invoices.status ==
+                      ApiStatus.loading,
+                  onTap: () => handleConfirm(context),
                   padding: const EdgeInsets.fromLTRB(17, 9, 18, 10),
                   borderRadius: const BorderRadius.all(Radius.circular(16)),
                   height: 40,

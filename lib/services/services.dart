@@ -19,6 +19,7 @@ class Services {
       _dio = Dio(
         BaseOptions(
           baseUrl: 'http://api.calorilin.me/',
+
           // validateStatus: (status) {
           //   return (status ?? 0) < 500;
           // },
