@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_capstone_project/helpers/providers/fragment_manager.dart';
 import 'package:flutter_capstone_project/view_models/auth_view_model.dart';
 import 'package:flutter_capstone_project/widgets/fragments/home_fragment/components/login_fragment.dart';
+import 'package:flutter_capstone_project/widgets/fragments/profile_fragment/change_password_fragment.dart';
 import 'package:flutter_capstone_project/widgets/fragments/profile_fragment/my_profile_fragment.dart';
 import 'package:provider/provider.dart';
 
@@ -20,11 +21,13 @@ class _ProfileFragmentState extends State<ProfileFragment> {
 
     String? token = context.watch<AuthViewModel>().token.data;
     if (token == null) {
-      return LoginFragment();
+      return const LoginFragment();
     }
     switch (fragmentEnum) {
+      case FragmentEnum.changePasswordFragment:
+        return const ChangePasswordFragment();
       default:
-        return MyProfileFragment();
+        return const MyProfileFragment();
     }
   }
 }

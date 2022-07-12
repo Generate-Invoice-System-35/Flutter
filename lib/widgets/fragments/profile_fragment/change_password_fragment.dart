@@ -15,19 +15,15 @@ import 'package:flutter_capstone_project/widgets/common/gradient_button.dart';
 import 'package:flutter_capstone_project/widgets/inputs/text_input.dart';
 import 'package:provider/provider.dart';
 
-class MyProfileFragment extends StatefulWidget {
-  const MyProfileFragment({Key? key}) : super(key: key);
+class ChangePasswordFragment extends StatefulWidget {
+  const ChangePasswordFragment({Key? key}) : super(key: key);
 
   @override
-  State<MyProfileFragment> createState() => _MyProfileFragmentState();
+  State<ChangePasswordFragment> createState() => _ChangePasswordFragmentState();
 }
 
-class _MyProfileFragmentState extends State<MyProfileFragment> {
+class _ChangePasswordFragmentState extends State<ChangePasswordFragment> {
   final FormManager _formManager = FormManager();
-
-  String? onValidateUsername(String? value) {
-    return Validators.required(value);
-  }
 
   String? onValidatePassword(String? value) {
     return Validators.required(value);
@@ -57,12 +53,6 @@ class _MyProfileFragmentState extends State<MyProfileFragment> {
     super.initState();
   }
 
-  void onNavigateChangePassword(BuildContext context) {
-    context
-        .read<FragmentManager>()
-        .navigateToFragment(fragmentEnum: FragmentEnum.changePasswordFragment);
-  }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -74,7 +64,7 @@ class _MyProfileFragmentState extends State<MyProfileFragment> {
             children: [
               const SizedBox(height: 40),
               const FragmentBackButton(),
-              SizedBox(height: MediaQuery.of(context).size.height / 6),
+              SizedBox(height: MediaQuery.of(context).size.height / 7),
               Center(
                 child: Container(
                   padding: const EdgeInsets.only(top: 12, left: 16, right: 16, bottom: 36),
@@ -99,7 +89,7 @@ class _MyProfileFragmentState extends State<MyProfileFragment> {
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                           color: ColorConstant.redLight,
                           child: const Text(
-                            "Access and manage your instance from this Fattures account.",
+                            "Keep your password private and secure",
                             style: TypographyConstant.body,
                             textAlign: TextAlign.center,
                           ),
@@ -111,40 +101,21 @@ class _MyProfileFragmentState extends State<MyProfileFragment> {
                         ),
                         const SizedBox(height: 12),
                         TextInput(
-                          placeholder: "Username",
-                          label: "Username",
-                          name: "username",
-                          defaultValue: "Jovin",
-                          onValidate: onValidateUsername,
+                          placeholder: "New Password",
+                          label: "New Password",
+                          name: "newPassword",
+                          onValidate: onValidatePassword,
                         ),
-                        const SizedBox(height: 23),
-                        const SizedBox(
-                          width: double.infinity,
-                          child: Text(
-                            "Password Management",
-                            style: TypographyConstant.h2,
-                            textAlign: TextAlign.start,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: TextButton(
-                            style: TextButton.styleFrom(
-                              primary: ColorConstant.textButtonOrange,
-                              padding: EdgeInsets.zero,
-                              minimumSize: Size.zero,
-                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            ),
-                            onPressed: () => onNavigateChangePassword(context),
-                            child: Text("CHANGE PASSWORD",
-                                style: TypographyConstant.h2
-                                    .merge(const TextStyle(decoration: TextDecoration.underline))),
-                          ),
+                        const SizedBox(height: 12),
+                        TextInput(
+                          placeholder: "Repeat New Password",
+                          label: "Repeat New Password",
+                          name: "repeatNewPassword",
+                          onValidate: onValidatePassword,
                         ),
                         const SizedBox(height: 40),
                         GradientButton(
-                          "EDIT",
+                          "CHANGE",
                           width: double.infinity,
                           loading: context.watch<AuthViewModel>().token.status == ApiStatus.loading,
                           height: 40,

@@ -30,25 +30,27 @@ class _InvoicesFragmentState extends State<InvoicesFragment> {
     return;
   }
 
+  void clearChecks() {
+    checks.clear();
+  }
+
   void onNavigateUpload(BuildContext context) {
     context.read<FragmentManager>().navigateToFragment(fragmentEnum: FragmentEnum.uploadFragment);
   }
 
   void onNavigateGenerate(BuildContext context) async {
-    ApiResponse<List<Invoice>> res =
-        await Provider.of<InvoicesViewModel>(context, listen: false).getInvoices();
+    ApiResponse<List<Invoice>>? res =
+        Provider.of<InvoicesViewModel>(context, listen: false).invoices;
     List<int> ids = [];
-    if (res.data != null) {
+    if (res?.data != null) {
       checks.forEach((key, value) {
         if (value) {
-          ids.add(res.data?[key].id ?? 0);
+          ids.add(res?.data?[key].id ?? 0);
         }
       });
+      context.read<FragmentManager>().navigateToFragment(
+          fragmentEnum: FragmentEnum.invoiceItemsFragment, invoiceIdsParam: ids);
     }
-
-    context
-        .read<FragmentManager>()
-        .navigateToFragment(fragmentEnum: FragmentEnum.invoiceItemsFragment, invoiceIdsParam: ids);
   }
 
   @override
@@ -116,7 +118,11 @@ class _InvoicesFragmentState extends State<InvoicesFragment> {
               //     style: TypographyConstant.button3.merge(const TextStyle(color: Colors.black)),
               //   ),
               // ),
-              FilterDropdown(changeState: setState),
+              FilterDropdown(
+                changeState: setState,
+                changeChecksOnIdx: changeChecksOnIdx,
+                clearChecks: clearChecks,
+              ),
               const SizedBox(width: 28),
               // TextButton.icon(
               //   style: TextButton.styleFrom(padding: EdgeInsets.zero),

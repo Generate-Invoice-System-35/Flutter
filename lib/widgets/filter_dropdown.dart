@@ -9,8 +9,15 @@ import 'package:provider/provider.dart';
 
 class FilterDropdown extends StatefulWidget {
   void Function(void Function()) changeState;
+  void Function(int idx, bool state) changeChecksOnIdx;
+  void Function() clearChecks;
 
-  FilterDropdown({Key? key, required this.changeState}) : super(key: key);
+  FilterDropdown(
+      {Key? key,
+      required this.changeState,
+      required this.changeChecksOnIdx,
+      required this.clearChecks})
+      : super(key: key);
 
   @override
   State<FilterDropdown> createState() => _FilterDropdownState();
@@ -34,7 +41,7 @@ class _FilterDropdownState extends State<FilterDropdown> {
         .getInvoicesByStatus(status: status);
   }
 
-  void handleChange(String? value) async {
+  void handleChange(String? value, BuildContext context) async {
     if (value == selectedValue) {
       await getInvoices();
       widget.changeState(() {});
@@ -56,6 +63,15 @@ class _FilterDropdownState extends State<FilterDropdown> {
       case "Expired":
         await getInvoicesByStatus(status: 4);
         break;
+    }
+
+    ApiResponse<List<Invoice>>? res =
+        Provider.of<InvoicesViewModel>(context, listen: false).invoices;
+    widget.clearChecks();
+    if (res?.status == ApiStatus.success) {
+      for (int i = 0; i < (res?.data?.length ?? 0); i++) {
+        widget.changeChecksOnIdx(i, false);
+      }
     }
     setState(() {
       selectedValue = value;
@@ -94,7 +110,7 @@ class _FilterDropdownState extends State<FilterDropdown> {
           ),
         );
       }).toList(),
-      onChanged: handleChange,
+      onChanged: (value) => handleChange(value as String, context),
       iconSize: 0,
       underline: const SizedBox.shrink(),
     );

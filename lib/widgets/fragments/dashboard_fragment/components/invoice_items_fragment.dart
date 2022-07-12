@@ -80,6 +80,12 @@ class _InvoiceItemsFragmentState extends State<InvoiceItemsFragment> with Ticker
   }
 
   @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   void didChangeDependencies() async {
     setState(() {
       ids = Provider.of<FragmentManager>(context, listen: false).invoiceIds;
