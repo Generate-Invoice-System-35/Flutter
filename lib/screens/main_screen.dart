@@ -12,7 +12,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int curPage = 2;
+  int curPage = 1;
   void handleChangePage(int page) {
     setState(() => curPage = page);
     context.read<FragmentManager>().untrackedCurrentIdx = page;

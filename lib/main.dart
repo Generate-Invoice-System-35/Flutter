@@ -8,6 +8,7 @@ import 'package:flutter_capstone_project/screens/splash_screen.dart';
 import 'package:flutter_capstone_project/view_models/auth_view_model.dart';
 import 'package:flutter_capstone_project/view_models/generate_file_view_model.dart';
 import 'package:flutter_capstone_project/view_models/generate_invoices_view_model.dart';
+import 'package:flutter_capstone_project/view_models/invoice_items_by_number_view_model.dart';
 import 'package:flutter_capstone_project/view_models/invoice_view_model.dart';
 import 'package:flutter_capstone_project/view_models/invoices_view_model.dart';
 import 'package:flutter_capstone_project/view_models/token_view_model.dart';
@@ -28,6 +29,7 @@ class MyProvider extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => GenerateFileViewModel()),
         ChangeNotifierProvider(create: (_) => GenerateInvoicesViewModel()),
         ChangeNotifierProvider(create: (_) => AuthViewModel()),
+        ChangeNotifierProvider(create: (_) => InvoiceItemsByNumberViewModel()),
         ChangeNotifierProvider(create: (_) => InvoicesViewModel()),
         ChangeNotifierProvider(create: (_) => InvoiceViewModel()),
         ChangeNotifierProvider(create: (_) => FragmentManager()),

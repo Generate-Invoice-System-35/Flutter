@@ -61,4 +61,9 @@ class TypographyConstant {
     fontSize: 32,
     fontWeight: FontWeight.w700,
   );
+
+  static const TextStyle invoiceLines = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+  );
 }

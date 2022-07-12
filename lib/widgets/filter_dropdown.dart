@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_capstone_project/model/invoice_model.dart';
+import 'package:flutter_capstone_project/services/services.dart';
 import 'package:flutter_capstone_project/utils/color.constant.dart';
 import 'package:flutter_capstone_project/utils/typography.constant.dart';
+import 'package:flutter_capstone_project/view_models/invoices_view_model.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 class FilterDropdown extends StatefulWidget {
-  const FilterDropdown({Key? key}) : super(key: key);
+  void Function(void Function()) changeState;
+
+  FilterDropdown({Key? key, required this.changeState}) : super(key: key);
 
   @override
   State<FilterDropdown> createState() => _FilterDropdownState();
@@ -18,6 +24,44 @@ class _FilterDropdownState extends State<FilterDropdown> {
     'Pending',
     'Expired',
   ];
+
+  Future<void> getInvoices() async {
+    await Provider.of<InvoicesViewModel>(context, listen: false).getInvoices();
+  }
+
+  Future<void> getInvoicesByStatus({required int status}) async {
+    await Provider.of<InvoicesViewModel>(context, listen: false)
+        .getInvoicesByStatus(status: status);
+  }
+
+  void handleChange(String? value) async {
+    if (value == selectedValue) {
+      await getInvoices();
+      widget.changeState(() {});
+
+      return setState(() {
+        selectedValue = null;
+      });
+    }
+    switch (value) {
+      case "Unpaid":
+        await getInvoicesByStatus(status: 1);
+        break;
+      case "Paid":
+        await getInvoicesByStatus(status: 2);
+        break;
+      case "Pending":
+        await getInvoicesByStatus(status: 3);
+        break;
+      case "Expired":
+        await getInvoicesByStatus(status: 4);
+        break;
+    }
+    setState(() {
+      selectedValue = value;
+    });
+    widget.changeState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,16 +94,7 @@ class _FilterDropdownState extends State<FilterDropdown> {
           ),
         );
       }).toList(),
-      onChanged: (String? newValue) {
-        if (newValue == selectedValue) {
-          return setState(() {
-            selectedValue = null;
-          });
-        }
-        setState(() {
-          selectedValue = newValue;
-        });
-      },
+      onChanged: handleChange,
       iconSize: 0,
       underline: const SizedBox.shrink(),
     );

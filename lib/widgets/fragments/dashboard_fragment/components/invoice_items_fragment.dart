@@ -16,6 +16,7 @@ import 'package:flutter_capstone_project/view_models/invoice_view_model.dart';
 import 'package:flutter_capstone_project/widgets/common/fragment_back_button.dart';
 import 'package:flutter_capstone_project/widgets/common/gradient_button.dart';
 import 'package:flutter_capstone_project/widgets/common/gradient_circular_indicator.dart';
+import 'package:flutter_capstone_project/widgets/invoice_items_table.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -92,6 +93,7 @@ class _InvoiceItemsFragmentState extends State<InvoiceItemsFragment> with Ticker
   }
 
   void handleConfirm(BuildContext ctx) async {
+    if (ctx.read<GenerateInvoicesViewModel>().invoices.status == ApiStatus.loading) return;
     ApiResponse<MessageResult> res =
         await Provider.of<GenerateInvoicesViewModel>(ctx, listen: false)
             .generateInvoices(input: GenerateInvoicesInput(ids: ids));
@@ -175,6 +177,11 @@ class _InvoiceItemsFragmentState extends State<InvoiceItemsFragment> with Ticker
                             value: DateFormat('dd/MM/yyyy').format(
                                 context.read<InvoiceViewModel>().invoice?.data?.dueDate ??
                                     DateTime.now())),
+                        const SizedBox(height: 20),
+                        const Text("Invoice Lines", style: TypographyConstant.invoiceLines),
+                        InvoiceItemsTable(
+                            tableHeight: MediaQuery.of(context).size.height - 520,
+                            number: context.read<InvoiceViewModel>().invoice?.data?.number ?? ""),
                       ],
                     )
                   : Center(

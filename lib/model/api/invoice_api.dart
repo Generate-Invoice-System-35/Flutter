@@ -13,4 +13,10 @@ class InvoiceAPI {
     final response = await repo.get(url: 'invoice/$invoiceId');
     return await Future.value(Invoice.fromJson(response));
   }
+
+  static Future<List<Invoice>> getInvoicesByStatus({required int status}) async {
+    Services repo = Services();
+    final response = await repo.get(url: 'invoice/status/$status');
+    return await Future.value(response.map<Invoice>((e) => Invoice.fromJson(e)).toList());
+  }
 }

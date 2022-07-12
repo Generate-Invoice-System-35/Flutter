@@ -30,4 +30,22 @@ class InvoicesViewModel with ChangeNotifier {
     }
     return Future.value(_invoices);
   }
+
+  Future<ApiResponse<List<Invoice>>> getInvoicesByStatus({required int status}) async {
+    try {
+      changeState(ApiResponse(status: ApiStatus.loading));
+      final res = await InvoiceAPI.getInvoicesByStatus(status: status);
+
+      changeState(ApiResponse<List<Invoice>>(data: res, status: ApiStatus.success));
+    } catch (e) {
+      if (e is DioError) {
+        if (e.response?.data != null) {
+          changeState(ApiResponse(status: ApiStatus.error, message: e.response?.data['message']));
+        }
+      } else {
+        changeState(ApiResponse(status: ApiStatus.error, message: "Error"));
+      }
+    }
+    return Future.value(_invoices);
+  }
 }

@@ -116,17 +116,17 @@ class _InvoicesFragmentState extends State<InvoicesFragment> {
               //     style: TypographyConstant.button3.merge(const TextStyle(color: Colors.black)),
               //   ),
               // ),
-              const FilterDropdown(),
+              FilterDropdown(changeState: setState),
               const SizedBox(width: 28),
-              TextButton.icon(
-                style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                onPressed: () {},
-                icon: SvgPicture.asset('assets/icons/star.svg'),
-                label: Text(
-                  'Favorites',
-                  style: TypographyConstant.button3.merge(const TextStyle(color: Colors.black)),
-                ),
-              ),
+              // TextButton.icon(
+              //   style: TextButton.styleFrom(padding: EdgeInsets.zero),
+              //   onPressed: () {},
+              //   icon: SvgPicture.asset('assets/icons/star.svg'),
+              //   label: Text(
+              //     'Favorites',
+              //     style: TypographyConstant.button3.merge(const TextStyle(color: Colors.black)),
+              //   ),
+              // ),
               Expanded(
                 child: Container(),
               ),
