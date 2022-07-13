@@ -69,6 +69,14 @@ class _RegisterFragmentState extends State<RegisterFragment> {
     return Validators.required(value);
   }
 
+  String? onValidateEmail(String? value) {
+    return Validators.required(value) ?? Validators.email(value);
+  }
+
+  String? onValidatePhoneNumber(String? value) {
+    return Validators.required(value) ?? Validators.phoneNumber(value);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -148,14 +156,14 @@ class _RegisterFragmentState extends State<RegisterFragment> {
                           placeholder: "Email",
                           label: "Email",
                           name: "email",
-                          onValidate: onValidateUsername,
+                          onValidate: onValidateEmail,
                         ),
                         const SizedBox(height: 8),
                         TextInput(
                           placeholder: "No. Hp",
                           label: "No. Hp",
                           name: "phoneNumber",
-                          onValidate: onValidateUsername,
+                          onValidate: onValidatePhoneNumber,
                         ),
                         const SizedBox(height: 8),
                         TextInput(

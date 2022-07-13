@@ -10,4 +10,11 @@ class Validators {
             .hasMatch(value)) return "Kolom harus berisi email";
     return null;
   }
+
+  static String? phoneNumber(String? value) {
+    if (value == null || !RegExp(r"\+?([ -]?\d+)+|\(\d+\)([ -]\d+)").hasMatch(value)) {
+      return "Kolom harus berisi nomor telepon";
+    }
+    return null;
+  }
 }
