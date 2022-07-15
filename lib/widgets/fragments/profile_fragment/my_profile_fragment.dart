@@ -4,12 +4,14 @@ import 'package:flutter_capstone_project/helpers/providers/form_manager.dart';
 import 'package:flutter_capstone_project/helpers/providers/fragment_manager.dart';
 import 'package:flutter_capstone_project/helpers/validators.dart';
 import 'package:flutter_capstone_project/model/auth_model.dart';
+import 'package:flutter_capstone_project/model/user_model.dart';
 import 'package:flutter_capstone_project/services/services.dart';
 import 'package:flutter_capstone_project/utils/color.constant.dart';
 import 'package:flutter_capstone_project/utils/shadow.constant.dart';
 import 'package:flutter_capstone_project/utils/typography.constant.dart';
 import 'package:flutter_capstone_project/view_models/auth_view_model.dart';
 import 'package:flutter_capstone_project/view_models/token_view_model.dart';
+import 'package:flutter_capstone_project/view_models/user_view_model.dart';
 import 'package:flutter_capstone_project/widgets/common/fragment_back_button.dart';
 import 'package:flutter_capstone_project/widgets/common/gradient_button.dart';
 import 'package:flutter_capstone_project/widgets/inputs/text_input.dart';
@@ -34,27 +36,48 @@ class _MyProfileFragmentState extends State<MyProfileFragment> {
   }
 
   void onSubmit(BuildContext context) async {
-    if (_formManager.erroredFields.isEmpty) {
-      final LoginInput input = LoginInput(
-          username: _formManager.getValue('username'), password: _formManager.getValue('password'));
+    if (Provider.of<UserViewModel>(context, listen: false).user.status == ApiStatus.loading) return;
 
-      final res = await Provider.of<AuthViewModel>(context, listen: false).login(input: input);
-      if (res.status == ApiStatus.success && res.data != null) {
-        await Provider.of<TokenViewModel>(context, listen: false).setToken(token: res.data!);
-        Navigator.pushNamed(context, '/');
-        Provider.of<FragmentManager>(context, listen: false).clearAll();
-      } else {
-        if (res.message != null) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(res.message!)));
+    if (_formManager.erroredFields.isEmpty) {
+      final UpdateUsernameInput input =
+          UpdateUsernameInput(username: _formManager.getValue('username'));
+
+      final id = Provider.of<UserViewModel>(context, listen: false).user.data?.id;
+      if (id != null) {
+        final res = await Provider.of<UserViewModel>(context, listen: false)
+            .updateUsername(id: id, input: input);
+        if (res.status == ApiStatus.error) {
+          if (res.message != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(res.message!)));
+          }
+        } else if (res.status == ApiStatus.success) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text('${res.data?.messages!}')));
         }
       }
     }
   }
 
+  void getMe() async {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      String? token = Provider.of<AuthViewModel>(context, listen: false).token.data;
+      if (token != null) {
+        String? resUsername = (await Provider.of<UserViewModel>(context, listen: false)
+                .getMe(input: UserByTokenInput(token: token)))
+            .data
+            ?.email;
+        print(resUsername);
+        if (resUsername != null) {
+          _formManager.setValue('username', resUsername);
+        }
+      }
+    });
+  }
+
   @override
-  void initState() {
-    _formManager.setValue('username', 'jovin');
-    super.initState();
+  void didChangeDependencies() {
+    getMe();
+    super.didChangeDependencies();
   }
 
   void onNavigateChangePassword(BuildContext context) {
@@ -114,7 +137,7 @@ class _MyProfileFragmentState extends State<MyProfileFragment> {
                           placeholder: "Username",
                           label: "Username",
                           name: "username",
-                          defaultValue: "Jovin",
+                          defaultValue: context.read<UserViewModel>().user.data?.email,
                           onValidate: onValidateUsername,
                         ),
                         const SizedBox(height: 23),
@@ -146,7 +169,7 @@ class _MyProfileFragmentState extends State<MyProfileFragment> {
                         GradientButton(
                           "EDIT",
                           width: double.infinity,
-                          loading: context.watch<AuthViewModel>().token.status == ApiStatus.loading,
+                          loading: (context.read<UserViewModel>().user.status == ApiStatus.loading),
                           height: 40,
                           gradient: ColorConstant.orangeGradient,
                           onTap: () => onSubmit(context),

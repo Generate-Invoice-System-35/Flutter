@@ -54,6 +54,9 @@ class _TextInputState extends State<TextInput> {
 
   @override
   void didUpdateWidget(covariant TextInput oldWidget) {
+    if (oldWidget.defaultValue != widget.defaultValue) {
+      textEditingController.text = widget.defaultValue!;
+    }
     super.didUpdateWidget(oldWidget);
   }
 

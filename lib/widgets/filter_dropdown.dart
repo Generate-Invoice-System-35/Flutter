@@ -11,12 +11,14 @@ class FilterDropdown extends StatefulWidget {
   void Function(void Function()) changeState;
   void Function(int idx, bool state) changeChecksOnIdx;
   void Function() clearChecks;
+  int page;
 
   FilterDropdown(
       {Key? key,
       required this.changeState,
       required this.changeChecksOnIdx,
-      required this.clearChecks})
+      required this.clearChecks,
+      required this.page})
       : super(key: key);
 
   @override
@@ -33,12 +35,13 @@ class _FilterDropdownState extends State<FilterDropdown> {
   ];
 
   Future<void> getInvoices() async {
-    await Provider.of<InvoicesViewModel>(context, listen: false).getInvoices();
+    await Provider.of<InvoicesViewModel>(context, listen: false)
+        .getInvoicesByPage(input: InvoiceByPageInput(page: widget.page));
   }
 
   Future<void> getInvoicesByStatus({required int status}) async {
     await Provider.of<InvoicesViewModel>(context, listen: false)
-        .getInvoicesByStatus(status: status);
+        .getInvoicesByStatus(status: status, input: InvoiceByPageInput(page: widget.page));
   }
 
   void handleChange(String? value, BuildContext context) async {

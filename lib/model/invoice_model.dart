@@ -58,3 +58,19 @@ class Invoice {
     return data;
   }
 }
+
+class InvoiceByPageInput {
+  int? page;
+
+  InvoiceByPageInput({this.page});
+
+  InvoiceByPageInput.fromJson(Map<String, dynamic> json) {
+    page = json['page'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['page'] = page;
+    return data;
+  }
+}

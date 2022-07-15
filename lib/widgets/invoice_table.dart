@@ -13,6 +13,7 @@ class InvoiceTable extends StatefulWidget {
   final double tableHeight;
   String? query;
   Map<int, bool> checks;
+  int curPage;
   void Function(int idx, bool state) changeChecksOnIdx;
   void Function(void Function()) changeState;
   InvoiceTable(
@@ -21,7 +22,8 @@ class InvoiceTable extends StatefulWidget {
       required this.query,
       required this.checks,
       required this.changeChecksOnIdx,
-      required this.changeState})
+      required this.changeState,
+      required this.curPage})
       : super(key: key);
 
   @override
@@ -56,8 +58,8 @@ class _InvoiceTableState extends State<InvoiceTable> {
 
   void getInvoices() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      ApiResponse<List<Invoice>> res =
-          await Provider.of<InvoicesViewModel>(context, listen: false).getInvoices();
+      ApiResponse<List<Invoice>> res = await Provider.of<InvoicesViewModel>(context, listen: false)
+          .getInvoicesByPage(input: InvoiceByPageInput(page: widget.curPage));
       if (Provider.of<InvoicesViewModel>(context, listen: false).invoices?.status ==
           ApiStatus.error) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(

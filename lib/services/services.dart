@@ -61,4 +61,14 @@ class Services {
     );
     return Future.value(res?.data);
   }
+
+  Future<dynamic>? put<T>(
+      {required String url, required T data, void Function(int, int)? onSendProgress}) async {
+    Response<dynamic>? res = await _dio?.put(
+      url,
+      data: data,
+      onSendProgress: onSendProgress,
+    );
+    return Future.value(res?.data);
+  }
 }

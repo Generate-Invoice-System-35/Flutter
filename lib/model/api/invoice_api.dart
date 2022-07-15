@@ -14,9 +14,22 @@ class InvoiceAPI {
     return await Future.value(Invoice.fromJson(response));
   }
 
-  static Future<List<Invoice>> getInvoicesByStatus({required int status}) async {
+  static Future<List<Invoice>> getInvoicesByStatus(
+      {required int status, required InvoiceByPageInput input}) async {
     Services repo = Services();
-    final response = await repo.get(url: 'invoice/status/$status');
+    final response = await repo.post(url: 'invoice/status/$status', data: input);
     return await Future.value(response.map<Invoice>((e) => Invoice.fromJson(e)).toList());
+  }
+
+  static Future<List<Invoice>> getInvoicesByPagination({required InvoiceByPageInput input}) async {
+    Services repo = Services();
+    final response = await repo.post(url: 'invoice/pagination', data: input);
+    return await Future.value(response.map<Invoice>((e) => Invoice.fromJson(e)).toList());
+  }
+
+  static Future<int> getPaginationTotal() async {
+    Services repo = Services();
+    final response = await repo.get(url: 'invoice/pagination/total');
+    return await Future.value(response);
   }
 }

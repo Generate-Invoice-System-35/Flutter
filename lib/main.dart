@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_capstone_project/helpers/providers/form_manager.dart';
 import 'package:flutter_capstone_project/helpers/providers/fragment_manager.dart';
 import 'package:flutter_capstone_project/helpers/providers/overlay_manager.dart';
 import 'package:flutter_capstone_project/helpers/validators.dart';
@@ -9,9 +8,11 @@ import 'package:flutter_capstone_project/view_models/auth_view_model.dart';
 import 'package:flutter_capstone_project/view_models/generate_file_view_model.dart';
 import 'package:flutter_capstone_project/view_models/generate_invoices_view_model.dart';
 import 'package:flutter_capstone_project/view_models/invoice_items_by_number_view_model.dart';
+import 'package:flutter_capstone_project/view_models/invoice_total_pagination_view_model.dart';
 import 'package:flutter_capstone_project/view_models/invoice_view_model.dart';
 import 'package:flutter_capstone_project/view_models/invoices_view_model.dart';
 import 'package:flutter_capstone_project/view_models/token_view_model.dart';
+import 'package:flutter_capstone_project/view_models/user_view_model.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -28,6 +29,8 @@ class MyProvider extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => TokenViewModel()),
         ChangeNotifierProvider(create: (_) => GenerateFileViewModel()),
         ChangeNotifierProvider(create: (_) => GenerateInvoicesViewModel()),
+        ChangeNotifierProvider(create: (_) => InvoiceTotalPaginationViewModel()),
+        ChangeNotifierProvider(create: (_) => UserViewModel()),
         ChangeNotifierProvider(create: (_) => AuthViewModel()),
         ChangeNotifierProvider(create: (_) => InvoiceItemsByNumberViewModel()),
         ChangeNotifierProvider(create: (_) => InvoicesViewModel()),
@@ -48,28 +51,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final FormManager _formManager = FormManager();
-
-  Route<dynamic>? onGenerateRoute(RouteSettings settings) {
-    return null;
-    switch (settings.name) {
-      // case "/course-detail":
-      //   final String id = (settings.arguments ?? "626e792c055c8bad64bc2131") as String;
-      //   return PageRouteBuilder(
-      //     settings: settings,
-      //     pageBuilder: (_, __, ___) => CourseDetailScreen(id: id),
-      //     transitionsBuilder: (_, animation, __, child) {
-      //       final tween = Tween(begin: const Offset(1, 1), end: Offset.zero);
-      //       return SlideTransition(
-      //         position: animation.drive(tween),
-      //         child: child,
-      //       );
-      //     },
-      //   );
-    }
-    return null;
-  }
-
   Widget getInitialPage({required AsyncSnapshot<Object?> tokenSnapshot}) {
     if (tokenSnapshot.connectionState == ConnectionState.waiting) {
       return const SplashScreen();
@@ -78,18 +59,8 @@ class _MyAppState extends State<MyApp> {
     return const MainScreen();
   }
 
-  String? onValidateEmail(String? value) {
-    return Validators.email(value) ?? Validators.required(value);
-  }
-
   @override
   Widget build(BuildContext context) {
-    // return MaterialApp(
-    //   debugShowCheckedModeBanner: false,
-    //   theme: ThemeData(fontFamily: "Poppins"),
-    //   home: MainScreen(),
-    // );
-
     return Consumer<TokenViewModel>(
       builder: (_, state, ___) => FutureBuilder(
         future: state.setupToken(context),
@@ -97,13 +68,10 @@ class _MyAppState extends State<MyApp> {
           return MaterialApp(
             theme: ThemeData(fontFamily: "Poppins"),
             debugShowCheckedModeBanner: false,
-            routes: {},
-
+            routes: const {},
             home: getInitialPage(
               tokenSnapshot: tokenSnapshot,
             ),
-            // initialRoute: '/',
-            onGenerateRoute: onGenerateRoute,
           );
         },
       ),

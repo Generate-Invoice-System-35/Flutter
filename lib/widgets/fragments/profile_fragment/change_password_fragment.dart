@@ -4,12 +4,14 @@ import 'package:flutter_capstone_project/helpers/providers/form_manager.dart';
 import 'package:flutter_capstone_project/helpers/providers/fragment_manager.dart';
 import 'package:flutter_capstone_project/helpers/validators.dart';
 import 'package:flutter_capstone_project/model/auth_model.dart';
+import 'package:flutter_capstone_project/model/user_model.dart';
 import 'package:flutter_capstone_project/services/services.dart';
 import 'package:flutter_capstone_project/utils/color.constant.dart';
 import 'package:flutter_capstone_project/utils/shadow.constant.dart';
 import 'package:flutter_capstone_project/utils/typography.constant.dart';
 import 'package:flutter_capstone_project/view_models/auth_view_model.dart';
 import 'package:flutter_capstone_project/view_models/token_view_model.dart';
+import 'package:flutter_capstone_project/view_models/user_view_model.dart';
 import 'package:flutter_capstone_project/widgets/common/fragment_back_button.dart';
 import 'package:flutter_capstone_project/widgets/common/gradient_button.dart';
 import 'package:flutter_capstone_project/widgets/inputs/text_input.dart';
@@ -30,18 +32,23 @@ class _ChangePasswordFragmentState extends State<ChangePasswordFragment> {
   }
 
   void onSubmit(BuildContext context) async {
-    if (_formManager.erroredFields.isEmpty) {
-      final LoginInput input = LoginInput(
-          username: _formManager.getValue('username'), password: _formManager.getValue('password'));
+    if (Provider.of<UserViewModel>(context, listen: false).user.status == ApiStatus.loading) return;
 
-      final res = await Provider.of<AuthViewModel>(context, listen: false).login(input: input);
-      if (res.status == ApiStatus.success && res.data != null) {
-        await Provider.of<TokenViewModel>(context, listen: false).setToken(token: res.data!);
-        Navigator.pushNamed(context, '/');
-        Provider.of<FragmentManager>(context, listen: false).clearAll();
-      } else {
-        if (res.message != null) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(res.message!)));
+    if (_formManager.erroredFields.isEmpty) {
+      final UpdatePasswordInput input =
+          UpdatePasswordInput(password: _formManager.getValue('newPassword'));
+
+      final id = Provider.of<UserViewModel>(context, listen: false).user.data?.id;
+      if (id != null) {
+        final res = await Provider.of<UserViewModel>(context, listen: false)
+            .updatePassword(id: id, input: input);
+        if (res.status == ApiStatus.error) {
+          if (res.message != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(res.message!)));
+          }
+        } else if (res.status == ApiStatus.success) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text('${res.data?.messages!}')));
         }
       }
     }

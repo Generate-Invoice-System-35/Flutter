@@ -23,7 +23,7 @@ class AuthViewModel extends ChangeNotifier {
   Future<ApiResponse<String?>> register({required RegisterInput input}) async {
     try {
       changeState(ApiResponse(status: ApiStatus.loading));
-      final res = await AuthAPI.register(input: input);
+      await AuthAPI.register(input: input);
       changeState(ApiResponse<String>(status: ApiStatus.success));
     } catch (e) {
       if (e is DioError) {

@@ -1,8 +1,6 @@
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_capstone_project/helpers/providers/fragment_manager.dart';
 import 'package:flutter_capstone_project/view_models/auth_view_model.dart';
-import 'package:flutter_capstone_project/view_models/token_view_model.dart';
 import 'package:flutter_capstone_project/widgets/fragments/dashboard_fragment/components/invoice_items_fragment.dart';
 import 'package:flutter_capstone_project/widgets/fragments/dashboard_fragment/components/invoices_fragment.dart';
 import 'package:flutter_capstone_project/widgets/fragments/dashboard_fragment/components/send_invoices_fragment.dart';
@@ -24,17 +22,17 @@ class _DashboardFragmentState extends State<DashboardFragment> {
     FragmentEnum? fragmentEnum = context.watch<FragmentManager>().top();
     String? token = context.watch<AuthViewModel>().token.data;
     if (token == null) {
-      return LoginFragment();
+      return const LoginFragment();
     }
     switch (fragmentEnum) {
       case FragmentEnum.uploadFragment:
-        return UploadFragment();
+        return const UploadFragment();
       case FragmentEnum.sendInvoicesFragment:
-        return SendInvoicesFragment();
+        return const SendInvoicesFragment();
       case FragmentEnum.invoiceItemsFragment:
-        return InvoiceItemsFragment();
+        return const InvoiceItemsFragment();
       default:
-        return InvoicesFragment();
+        return const InvoicesFragment();
     }
   }
 }
