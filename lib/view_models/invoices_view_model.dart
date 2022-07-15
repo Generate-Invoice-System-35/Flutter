@@ -58,9 +58,7 @@ class InvoicesViewModel with ChangeNotifier {
       final res = await InvoiceAPI.getInvoicesByPagination(input: input);
       curStatus = null;
       changeState(ApiResponse<List<Invoice>>(data: res, status: ApiStatus.success));
-      print("123");
     } catch (e) {
-      print(1);
       if (e is DioError) {
         if (e.response?.data != null) {
           changeState(ApiResponse(status: ApiStatus.error, message: e.response?.data['message']));

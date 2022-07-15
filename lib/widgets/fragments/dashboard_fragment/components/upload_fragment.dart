@@ -50,9 +50,6 @@ class _UploadFragmentState extends State<UploadFragment> {
       if (res.message != null) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(res.message!)));
       }
-      print(res.data?.messages);
-      print(res.message);
-      print(res.data);
     }
     // print(res);
   }

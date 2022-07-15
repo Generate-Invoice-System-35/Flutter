@@ -66,7 +66,6 @@ class _MyProfileFragmentState extends State<MyProfileFragment> {
                 .getMe(input: UserByTokenInput(token: token)))
             .data
             ?.email;
-        print(resUsername);
         if (resUsername != null) {
           _formManager.setValue('username', resUsername);
         }
