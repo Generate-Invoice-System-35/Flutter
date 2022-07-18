@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_capstone_project/helpers/form_helper.dart';
 import 'package:flutter_capstone_project/helpers/providers/form_manager.dart';
 import 'package:flutter_capstone_project/helpers/providers/fragment_manager.dart';
+import 'package:flutter_capstone_project/helpers/providers/overlay_manager.dart';
 import 'package:flutter_capstone_project/helpers/validators.dart';
 import 'package:flutter_capstone_project/model/auth_model.dart';
 import 'package:flutter_capstone_project/model/user_model.dart';
@@ -53,6 +54,9 @@ class _MyProfileFragmentState extends State<MyProfileFragment> {
         } else if (res.status == ApiStatus.success) {
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text('${res.data?.messages!}')));
+          context
+              .read<OverlayManager>()
+              .switchOverlay(overlayEnum: OverlayEnum.profileUpdatedOverlay);
         }
       }
     }

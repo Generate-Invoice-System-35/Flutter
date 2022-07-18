@@ -205,24 +205,32 @@ class _InvoiceTableState extends State<InvoiceTable> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: widget.tableHeight,
-      child: HorizontalDataTable(
-        tableHeight: widget.tableHeight,
-        leftHandSideColumnWidth: 50,
-        isFixedHeader: true,
-        rightHandSideColumnWidth: 840,
-        headerWidgets: _getTitleWidget(),
-        leftSideItemBuilder: (ctx, idx) => _generateFirstColumnRow(ctx, idx),
-        rightSideItemBuilder: _generateRightHandSideColumnRow,
-        itemCount: getFilteredData(context.read<InvoicesViewModel>().invoices)?.length ?? 0,
-        rowSeparatorWidget: const Divider(
-          color: Colors.black54,
-          height: 0.0,
-          thickness: 0.0,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        (getFilteredData(context.read<InvoicesViewModel>().invoices)?.length ?? 0) == 0
+            ? const Text("No data entry yet")
+            : const SizedBox.shrink(),
+        SizedBox(
+          width: double.infinity,
+          height: widget.tableHeight,
+          child: HorizontalDataTable(
+            tableHeight: widget.tableHeight,
+            leftHandSideColumnWidth: 50,
+            isFixedHeader: true,
+            rightHandSideColumnWidth: 840,
+            headerWidgets: _getTitleWidget(),
+            leftSideItemBuilder: (ctx, idx) => _generateFirstColumnRow(ctx, idx),
+            rightSideItemBuilder: _generateRightHandSideColumnRow,
+            itemCount: getFilteredData(context.read<InvoicesViewModel>().invoices)?.length ?? 0,
+            rowSeparatorWidget: const Divider(
+              color: Colors.black54,
+              height: 0.0,
+              thickness: 0.0,
+            ),
+          ),
         ),
-      ),
+      ],
     );
   }
 }

@@ -66,4 +66,9 @@ class TypographyConstant {
     fontSize: 14,
     fontWeight: FontWeight.w500,
   );
+
+  static const TextStyle profileUpdated = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+  );
 }

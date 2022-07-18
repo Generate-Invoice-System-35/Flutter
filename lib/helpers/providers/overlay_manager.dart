@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 enum OverlayEnum {
   loadingOverlay,
   emailSentOverlay,
+  uploadedOverlay,
+  profileUpdatedOverlay,
   none,
 }
 

@@ -4,6 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_capstone_project/helpers/providers/fragment_manager.dart';
+import 'package:flutter_capstone_project/helpers/providers/overlay_manager.dart';
 import 'package:flutter_capstone_project/services/services.dart';
 import 'package:flutter_capstone_project/utils/color.constant.dart';
 import 'package:flutter_capstone_project/utils/typography.constant.dart';
@@ -49,6 +51,17 @@ class _UploadFragmentState extends State<UploadFragment> {
       }
       if (res.message != null) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(res.message!)));
+      }
+
+      if (res.status == ApiStatus.success) {
+        await Future.delayed(const Duration(seconds: 1));
+
+        Provider.of<OverlayManager>(context, listen: false)
+            .switchOverlay(overlayEnum: OverlayEnum.uploadedOverlay);
+        await Future.delayed(const Duration(seconds: 1, milliseconds: 500));
+        Provider.of<OverlayManager>(context, listen: false)
+            .switchOverlay(overlayEnum: OverlayEnum.none);
+        Provider.of<FragmentManager>(context, listen: false).pop();
       }
     }
     // print(res);
