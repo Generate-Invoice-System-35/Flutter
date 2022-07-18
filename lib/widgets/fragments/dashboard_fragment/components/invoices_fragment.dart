@@ -82,6 +82,7 @@ class _InvoicesFragmentState extends State<InvoicesFragment> {
 
     await Provider.of<InvoicesViewModel>(context, listen: false)
         .refetchData(input: InvoiceByPageInput(page: nextPage));
+    checks.clear();
     setState(() {
       curPage = nextPage;
     });
@@ -92,6 +93,7 @@ class _InvoicesFragmentState extends State<InvoicesFragment> {
 
     await Provider.of<InvoicesViewModel>(context, listen: false)
         .refetchData(input: InvoiceByPageInput(page: prevPage));
+    checks.clear();
     setState(() {
       curPage = prevPage;
     });
